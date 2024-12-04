@@ -1,0 +1,177 @@
+<?php
+
+namespace App\Filament\Resources;
+
+use App\Filament\Resources\IncomeResource\Pages;
+use App\Filament\Resources\IncomeResource\RelationManagers;
+use App\Models\Income;
+use Filament\Forms;
+use Filament\Forms\Form;
+use Filament\Forms\Get;
+use Filament\Forms\Set;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+
+class IncomeResource extends Resource
+{
+    protected static ?string $model = Income::class;
+
+    protected static ?string $recordTitleAttribute = 'title';
+
+    protected static ?string $modelLabel = 'Przychód';
+    protected static ?string $pluralModelLabel = 'Przychody';
+
+    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function form(Form $form): Form
+    {
+        return $form
+            ->schema([
+                Forms\Components\TextInput::make('title')
+                    ->label('Tytuł transakcji')
+                    ->required()
+                    ->maxLength(255)
+                    ->columnSpan('full'),
+                Forms\Components\Repeater::make('items')
+                    ->relationship()
+                    ->label('Pozycje')
+                    ->columns(12)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->schema([
+                        Forms\Components\TextInput::make('title')
+                            ->label('Tytuł transakcji')
+                            ->columnSpan(['lg' => 6])
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Ilość')
+                            ->columnSpan(['lg' => 2])
+                            ->required()
+                            ->integer()
+                            ->minValue(1)
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->step(1),
+                        Forms\Components\TextInput::make('price')
+                            ->label('Kwota')
+                            ->columnSpan(['lg' => 2])
+                            ->required()
+                            ->numeric()
+                            ->suffix('zł')
+                            ->inputMode('decimal')
+                            ->live(onBlur: true)
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->step(0.01),
+                        Forms\Components\TextInput::make('amount')
+                            ->columnSpan(['lg' => 2])
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->label('Suma')
+                            ->numeric()
+                            ->suffix('zł')
+                            ->inputMode('decimal')
+                            ->step(0.01),
+                    ])
+                    ->minItems(1)
+                    ->reorderableWithButtons()
+                    ->orderColumn('order_column')
+                    ->cloneable()
+                    ->columnSpan('full'),
+                Forms\Components\TextInput::make('amount')
+                    ->label('Suma transakcji')
+                    ->readOnly()
+                    ->suffix('zł')
+                    ->live(onBlur: true)
+                    ->afterStateHydrated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->columnSpan(['lg' => 2]),
+                Forms\Components\DatePicker::make('date')
+                    ->label('Data sprzedaży')
+                    ->default(now())
+                    ->required()
+                    ->columnSpan(['lg' => 3]),
+                Forms\Components\TextInput::make('description')
+                    ->label('Notatka')
+                    ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
+                    ->maxLength(255)
+                    ->columnSpan(['lg' => 7]),
+            ])
+            ->columns(12);
+    }
+
+    public static function table(Table $table): Table
+    {
+        return $table
+            ->columns([
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Tytuł transakcji')
+                    ->limit(50)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('amount')
+                    ->label('Kwota transakcji')
+                    ->money('PLN')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('date')
+                    ->label('Data sprzedaży')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
+                    ->label('Notatka')
+                    ->limit(50)
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+            ])
+            ->filters([
+                //
+            ])
+            ->actions([
+                Tables\Actions\EditAction::make(),
+            ])
+            ->bulkActions([
+                Tables\Actions\BulkActionGroup::make([
+                    Tables\Actions\DeleteBulkAction::make(),
+                ]),
+            ]);
+    }
+
+    public static function getRelations(): array
+    {
+        return [
+            //
+        ];
+    }
+
+    public static function getPages(): array
+    {
+        return [
+            'index' => Pages\ListIncomes::route('/'),
+            'create' => Pages\CreateIncome::route('/create'),
+            'edit' => Pages\EditIncome::route('/{record}/edit'),
+        ];
+    }
+
+    public static function updateTotals(Get $get, Set $set): void
+    {
+        $items = collect($get('items'));
+
+        $total = $items->reduce(function ($subtotal, $value) {
+            return $subtotal + round((($value['price'] ?? 0) * ((int) $value['quantity'] ?? 0)), 2);
+        }, 0);
+
+        $set('amount', $total);
+    }
+}
