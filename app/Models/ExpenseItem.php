@@ -2,14 +2,14 @@
 
 namespace App\Models;
 
-use App\Observers\IncomeItemObserver;
+use App\Observers\ExpenseItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 
-#[ObservedBy(IncomeItemObserver::class)]
-class IncomeItem extends Model implements Sortable
+#[ObservedBy(ExpenseItemObserver::class)]
+class ExpenseItem extends Model implements Sortable
 {
     use SortableTrait;
 

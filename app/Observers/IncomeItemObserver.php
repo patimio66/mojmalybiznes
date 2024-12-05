@@ -11,7 +11,7 @@ class IncomeItemObserver
      */
     public function creating(IncomeItem $incomeItem): void
     {
-        $incomeItem->amount = $incomeItem->quantity * $incomeItem->price;
+        $incomeItem->amount = round((($incomeItem->price ?? 0) * ((int) $incomeItem->quantity ?? 0)), 2);
     }
 
     /**
@@ -20,6 +20,14 @@ class IncomeItemObserver
     public function created(IncomeItem $incomeItem): void
     {
         //
+    }
+
+    /**
+     * Handle the IncomeItem "updating" event.
+     */
+    public function updating(IncomeItem $incomeItem): void
+    {
+        $incomeItem->amount = round((($incomeItem->price ?? 0) * ((int) $incomeItem->quantity ?? 0)), 2);
     }
 
     /**
