@@ -2,9 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\IncomeResource\Pages;
-use App\Filament\Resources\IncomeResource\RelationManagers;
-use App\Models\Income;
+use App\Filament\Resources\ExpenseResource\Pages;
+use App\Filament\Resources\ExpenseResource\RelationManagers;
+use App\Models\Expense;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -15,14 +15,14 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class IncomeResource extends Resource
+class ExpenseResource extends Resource
 {
-    protected static ?string $model = Income::class;
+    protected static ?string $model = Expense::class;
 
-    protected static ?string $modelLabel = 'Przychód';
-    protected static ?string $pluralModelLabel = 'Przychody';
+    protected static ?string $modelLabel = 'Wydatek';
+    protected static ?string $pluralModelLabel = 'Wydatki';
 
-    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
+    protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-down';
 
     public static function form(Form $form): Form
     {
@@ -31,7 +31,7 @@ class IncomeResource extends Resource
                 Forms\Components\TextInput::make('title')
                     ->label('Tytuł transakcji')
                     ->required()
-                    ->helperText('np.: Zamówienie świec zapachowych')
+                    ->helperText('np.: Zakupy materiałów do świec')
                     ->maxLength(255)
                     ->columnSpan('full'),
                 Forms\Components\Repeater::make('items')
@@ -47,7 +47,7 @@ class IncomeResource extends Resource
                             ->label('Tytuł pozycji')
                             ->columnSpan(['lg' => 4])
                             ->required()
-                            ->helperText('np.: Świeca o zapachu lawendowym')
+                            ->helperText('np.: Wosk sojowy')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('quantity')
                             ->label('Ilość')
@@ -190,9 +190,9 @@ class IncomeResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListIncomes::route('/'),
-            'create' => Pages\CreateIncome::route('/create'),
-            'edit' => Pages\EditIncome::route('/{record}/edit'),
+            'index' => Pages\ListExpenses::route('/'),
+            'create' => Pages\CreateExpense::route('/create'),
+            'edit' => Pages\EditExpense::route('/{record}/edit'),
         ];
     }
 
