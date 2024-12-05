@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\ExpenseItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -11,7 +12,8 @@ use Spatie\EloquentSortable\SortableTrait;
 #[ObservedBy(ExpenseItemObserver::class)]
 class ExpenseItem extends Model implements Sortable
 {
-    use SortableTrait;
+    /** @use HasFactory<\Database\Factories\ExpenseItemFactory> */
+    use HasFactory, SortableTrait;
 
     protected $fillable = [
         'title',

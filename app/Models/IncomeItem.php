@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\IncomeItemObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
@@ -11,7 +12,8 @@ use Spatie\EloquentSortable\SortableTrait;
 #[ObservedBy(IncomeItemObserver::class)]
 class IncomeItem extends Model implements Sortable
 {
-    use SortableTrait;
+    /** @use HasFactory<\Database\Factories\IncomeItemFactory> */
+    use HasFactory, SortableTrait;
 
     protected $fillable = [
         'title',

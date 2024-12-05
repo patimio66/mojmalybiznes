@@ -7,6 +7,7 @@ use App\Models\Income;
 use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
+use Illuminate\Support\Carbon;
 
 class DashboardStats extends BaseWidget
 {
@@ -14,20 +15,20 @@ class DashboardStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $startDate = $this->filters['startDate'] ?? now()->startOfYear();
-        $endDate = $this->filters['endDate'] ?? now()->endOfYear();
+        $startDate = Carbon::parse($this->filters['startDate']) ?? Carbon::now()->startOfYear();
+        $endDate = Carbon::parse($this->filters['endDate']) ?? Carbon::now()->endOfYear();
 
         $incomes = Income::whereBetween('date', [$startDate, $endDate])->sum('amount');
         $expenses = Expense::whereBetween('date', [$startDate, $endDate])->sum('amount');
         $revenue = $incomes - $expenses;
         return [
-            Stat::make('Przychód w wybranym okresie', $incomes . ' zł')
+            Stat::make('Przychód w okresie ' . $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y') . ':', $incomes . ' zł')
                 ->description('Suma przychodów')
                 ->color('success'),
-            Stat::make('Wydatki w wybranym okresie', $expenses . ' zł')
+            Stat::make('Wydatki w okresie ' . $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y') . ':', $expenses . ' zł')
                 ->description('Suma wydatków')
                 ->color('danger'),
-            Stat::make('Dochód w wybranym okresie', $revenue . ' zł')
+            Stat::make('Dochód w okresie ' . $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y') . ':', $revenue . ' zł')
                 ->description('Różnica: przychody - wydatki')
                 ->color('warning'),
         ];

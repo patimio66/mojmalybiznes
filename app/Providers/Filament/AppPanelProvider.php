@@ -43,9 +43,9 @@ class AppPanelProvider extends PanelProvider
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\\Filament\\Widgets')
             ->widgets([
                 DashboardStats::class,
-                IncomeLimitChart::class,
                 IncomeYearlyChart::class,
                 ExpenseYearlyChart::class,
+                IncomeLimitChart::class,
             ])
             ->middleware([
                 EncryptCookies::class,

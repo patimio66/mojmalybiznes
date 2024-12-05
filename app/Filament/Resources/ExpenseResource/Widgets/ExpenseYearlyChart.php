@@ -4,22 +4,29 @@ namespace App\Filament\Resources\ExpenseResource\Widgets;
 
 use App\Models\Expense;
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\Concerns\InteractsWithPageFilters;
 use Flowframe\Trend\Trend;
 use Flowframe\Trend\TrendValue;
+use Illuminate\Support\Carbon;
 
 class ExpenseYearlyChart extends ChartWidget
 {
-    protected static ?string $heading = 'Wydatki w skali roku';
+    use InteractsWithPageFilters;
+
+    protected static ?string $heading = 'Wydatki';
 
     protected int | string | array $columnSpan = 6;
 
     protected function getData(): array
     {
+        $startDate = Carbon::parse($this->filters['startDate']) ?? Carbon::now()->startOfYear();
+        $endDate = Carbon::parse($this->filters['endDate']) ?? Carbon::now()->endOfYear();
+
         $data = Trend::model(Expense::class)
             ->dateColumn('date')
             ->between(
-                start: now()->startOfYear(),
-                end: now()->endOfYear(),
+                start: $startDate,
+                end: $endDate,
             )
             ->perMonth()
             ->sum('amount');
