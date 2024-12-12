@@ -29,4 +29,9 @@ class Dashboard extends BaseDashboard
                 ]),
         ];
     }
+
+    public function getColumns(): int|string|array
+    {
+        return 12;
+    }
 }

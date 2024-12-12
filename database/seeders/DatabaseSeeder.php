@@ -2,7 +2,11 @@
 
 namespace Database\Seeders;
 
+use App\Models\Expense;
+use App\Models\ExpenseItem;
 use App\Models\User;
+use App\Models\Income;
+use App\Models\IncomeItem;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,11 +17,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        User::factory()
+            ->create([
+                'name' => 'John Doe',
+                'email' => 'test@example.com',
+            ]);
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
+        Income::factory(100)->hasItems(IncomeItem::factory()->count(rand(1, 10)))->create();
+
+        Income::all()->each(function (Income $income) {
+            $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
+                return $subtotal + ($incomeItem->amount ?? 0);
+            }, 0);
+            $income->save();
+        });
+
+        Expense::factory(100)->hasItems(ExpenseItem::factory()->count(rand(1, 10)))->create();
+
+        Expense::all()->each(function (Expense $income) {
+            $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
+                return $subtotal + ($incomeItem->amount ?? 0);
+            }, 0);
+            $income->save();
+        });
     }
 }
