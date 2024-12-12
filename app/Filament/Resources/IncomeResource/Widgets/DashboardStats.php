@@ -15,8 +15,8 @@ class DashboardStats extends BaseWidget
 
     protected function getStats(): array
     {
-        $startDate = Carbon::parse($this->filters['startDate']) ?? Carbon::now()->startOfYear();
-        $endDate = Carbon::parse($this->filters['endDate']) ?? Carbon::now()->endOfYear();
+        $startDate = $this->filters && $this->filters['startDate'] ? Carbon::parse($this->filters['startDate']) : Carbon::now()->startOfYear();
+        $endDate = $this->filters && $this->filters['endDate'] ? Carbon::parse($this->filters['endDate']) : Carbon::now()->endOfYear();
 
         $incomes = Income::whereBetween('date', [$startDate, $endDate])->sum('amount');
         $expenses = Expense::whereBetween('date', [$startDate, $endDate])->sum('amount');

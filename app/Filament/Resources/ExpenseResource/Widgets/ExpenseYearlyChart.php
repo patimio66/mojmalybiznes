@@ -19,11 +19,12 @@ class ExpenseYearlyChart extends ChartWidget
 
     protected function getData(): array
     {
-        $startDate = Carbon::parse($this->filters['startDate']) ?? Carbon::now()->startOfYear();
-        $endDate = Carbon::parse($this->filters['endDate']) ?? Carbon::now()->endOfYear();
+        $startDate = $this->filters && $this->filters['startDate'] ? Carbon::parse($this->filters['startDate']) : Carbon::now()->startOfYear();
+        $endDate = $this->filters && $this->filters['endDate'] ? Carbon::parse($this->filters['endDate']) : Carbon::now()->endOfYear();
 
         $data = Trend::model(Expense::class)
             ->dateColumn('date')
+            ->dateAlias('date_sum')
             ->between(
                 start: $startDate,
                 end: $endDate,
