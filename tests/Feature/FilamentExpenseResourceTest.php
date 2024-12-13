@@ -45,7 +45,7 @@ it('can create an expense', function () {
         ->fillForm([
             'title' => $newExpense->title,
             'items' => $newExpenseItemsFormArray,
-            'date' => $newExpense->date->format('Y-m-d'),
+            'date' => $newExpense->date,
             'description' => $newExpense->description,
         ])
         ->assertFormSet(function (array $state) {
@@ -58,7 +58,7 @@ it('can create an expense', function () {
     assertDatabaseHas(Expense::class, [
         'title' => $newExpense->title,
         'amount' => $newExpenseItems->sum('amount'),
-        'date' => $newExpense->date->format('Y-m-d'),
+        'date' => $newExpense->date,
         'description' => $newExpense->description,
     ]);
 
@@ -84,7 +84,7 @@ it('validates that at least one ExpenseItem is required', function () {
         ->fillForm([
             'title' => $newExpense->title,
             'items' => [],
-            'date' => $newExpense->date->format('Y-m-d'),
+            'date' => $newExpense->date,
             'description' => $newExpense->description,
         ])
         ->assertFormSet(function (array $state) {
@@ -96,7 +96,7 @@ it('validates that at least one ExpenseItem is required', function () {
 
     assertDatabaseMissing(Expense::class, [
         'title' => $newExpense->title,
-        'date' => $newExpense->date->format('Y-m-d'),
+        'date' => $newExpense->date,
         'description' => $newExpense->description,
     ]);
 });

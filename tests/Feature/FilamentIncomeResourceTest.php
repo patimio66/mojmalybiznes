@@ -45,7 +45,7 @@ it('can create an income', function () {
         ->fillForm([
             'title' => $newIncome->title,
             'items' => $newIncomeItemsFormArray,
-            'date' => $newIncome->date->format('Y-m-d'),
+            'date' => $newIncome->date,
             'description' => $newIncome->description,
         ])
         ->assertFormSet(function (array $state) {
@@ -58,7 +58,7 @@ it('can create an income', function () {
     assertDatabaseHas(Income::class, [
         'title' => $newIncome->title,
         'amount' => $newIncomeItems->sum('amount'),
-        'date' => $newIncome->date->format('Y-m-d'),
+        'date' => $newIncome->date,
         'description' => $newIncome->description,
     ]);
 
@@ -84,7 +84,7 @@ it('validates that at least one IncomeItem is required', function () {
         ->fillForm([
             'title' => $newIncome->title,
             'items' => [],
-            'date' => $newIncome->date->format('Y-m-d'),
+            'date' => $newIncome->date,
             'description' => $newIncome->description,
         ])
         ->assertFormSet(function (array $state) {
@@ -96,7 +96,7 @@ it('validates that at least one IncomeItem is required', function () {
 
     assertDatabaseMissing(Income::class, [
         'title' => $newIncome->title,
-        'date' => $newIncome->date->format('Y-m-d'),
+        'date' => $newIncome->date,
         'description' => $newIncome->description,
     ]);
 });
