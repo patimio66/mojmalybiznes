@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Expense;
+use Illuminate\Support\Facades\Auth;
 
 class ExpenseObserver
 {
@@ -11,7 +12,7 @@ class ExpenseObserver
      */
     public function creating(Expense $expense): void
     {
-        //
+        $expense->user_id = Auth::user()->id;
     }
 
     /**
