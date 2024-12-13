@@ -11,9 +11,7 @@ class ExpenseObserver
      */
     public function creating(Expense $expense): void
     {
-        $expense->amount = $expense->items->reduce(function ($subtotal, $expenseItem) {
-            return $subtotal + ($expenseItem->amount ?? 0);
-        }, 0);
+        //
     }
 
     /**
@@ -29,9 +27,7 @@ class ExpenseObserver
      */
     public function updating(Expense $expense): void
     {
-        $expense->amount = $expense->items->reduce(function ($subtotal, $expenseItem) {
-            return $subtotal + ($expenseItem->amount ?? 0);
-        }, 0);
+        //
     }
 
     /**

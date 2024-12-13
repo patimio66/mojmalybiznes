@@ -33,4 +33,12 @@ class Expense extends Model
     {
         return $this->hasMany(ExpenseItem::class);
     }
+
+    public function updateTotals(): bool
+    {
+        $amount = $this->items->reduce(function ($subtotal, $expenseItem) {
+            return $subtotal + ($expenseItem->amount ?? 0);
+        }, 0);
+        return $this->update(['amount' => $amount]);
+    }
 }
