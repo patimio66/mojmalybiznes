@@ -19,7 +19,7 @@ class ExpenseItemObserver
      */
     public function created(ExpenseItem $expenseItem): void
     {
-        //
+        $expenseItem->expense->updateTotal();
     }
 
     /**
@@ -35,7 +35,7 @@ class ExpenseItemObserver
      */
     public function updated(ExpenseItem $expenseItem): void
     {
-        //
+        $expenseItem->expense->updateTotal();
     }
 
     /**

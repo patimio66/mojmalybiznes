@@ -11,9 +11,7 @@ class IncomeObserver
      */
     public function creating(Income $income): void
     {
-        $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
-            return $subtotal + ($incomeItem->amount ?? 0);
-        }, 0);
+        //
     }
 
     /**
@@ -29,9 +27,7 @@ class IncomeObserver
      */
     public function updating(Income $income): void
     {
-        $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
-            return $subtotal + ($incomeItem->amount ?? 0);
-        }, 0);
+        //
     }
 
     /**

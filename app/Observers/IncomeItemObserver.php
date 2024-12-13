@@ -19,7 +19,7 @@ class IncomeItemObserver
      */
     public function created(IncomeItem $incomeItem): void
     {
-        //
+        $incomeItem->income->updateTotal();
     }
 
     /**
@@ -35,7 +35,7 @@ class IncomeItemObserver
      */
     public function updated(IncomeItem $incomeItem): void
     {
-        //
+        $incomeItem->income->updateTotal();
     }
 
     /**
