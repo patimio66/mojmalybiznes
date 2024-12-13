@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Income;
+use Illuminate\Support\Facades\Auth;
 
 class IncomeObserver
 {
@@ -11,7 +12,7 @@ class IncomeObserver
      */
     public function creating(Income $income): void
     {
-        //
+        $income->user_id = Auth::user()->id;
     }
 
     /**

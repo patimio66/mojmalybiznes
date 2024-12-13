@@ -9,6 +9,7 @@ use App\Models\Income;
 use App\Models\IncomeItem;
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Auth;
 
 class DatabaseSeeder extends Seeder
 {
@@ -17,11 +18,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory()
+        $user = User::factory()
             ->create([
                 'name' => 'John Doe',
                 'email' => 'test@example.com',
             ]);
+        Auth::login($user);
 
         Income::factory(100)->hasItems(IncomeItem::factory()->count(rand(1, 10)))->create();
 
