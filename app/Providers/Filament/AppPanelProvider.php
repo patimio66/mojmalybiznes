@@ -6,6 +6,7 @@ use App\Filament\Resources\ExpenseResource\Widgets\ExpenseYearlyChart;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
 use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
+use App\Http\Middleware\TransactionMiddleware;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -57,6 +58,7 @@ class AppPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
+                TransactionMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
