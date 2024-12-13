@@ -33,4 +33,12 @@ class Income extends Model
     {
         return $this->hasMany(IncomeItem::class);
     }
+
+    public function updateTotals(): bool
+    {
+        $amount = $this->items->reduce(function ($subtotal, $incomeItem) {
+            return $subtotal + ($incomeItem->amount ?? 0);
+        }, 0);
+        return $this->update(['amount' => $amount]);
+    }
 }
