@@ -200,9 +200,7 @@ class ExpenseResource extends Resource
     {
         $items = collect($get('items'));
 
-        $total = $items->reduce(function ($subtotal, $value) {
-            return $subtotal + round((($value['price'] ?? 0) * ((int) $value['quantity'] ?? 0)), 2);
-        }, 0);
+        $total = Expense::calculateTotal($items);
 
         $set('amount', $total);
     }
