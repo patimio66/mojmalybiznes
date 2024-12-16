@@ -16,7 +16,7 @@ class IncomeItemFactory extends Factory
      */
     public function definition(): array
     {
-        $quantity = fake()->randomNumber(2);
+        $quantity = fake()->randomFloat(2, 1, 10);
         $price = fake()->randomFloat(2, 0, 10);
         $amount = round((($price ?? 0) * ((int) $quantity ?? 0)), 2);
         return [
