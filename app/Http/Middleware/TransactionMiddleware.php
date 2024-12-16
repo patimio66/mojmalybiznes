@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Error;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +27,7 @@ class TransactionMiddleware
             return $response;
         } catch (\Exception $e) {
             DB::rollback();
-            return error($e->getMessage(), $e->getCode());
+            throw new Error($e->getMessage(), $e->getCode());
         }
     }
 }
