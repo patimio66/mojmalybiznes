@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ExpenseResource\Pages;
 use App\Filament\Resources\ExpenseResource\RelationManagers;
 use App\Models\Expense;
+use App\Models\ExpenseItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
@@ -56,9 +57,9 @@ class ExpenseResource extends Resource
                             ->numeric()
                             ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', ExpenseItem::calculateTotal($get('price'), $get('quantity'))))
                             ->step(0.01)
-                            ->minValue(0),
+                            ->minValue(0.01),
                         Forms\Components\Select::make('uom')
                             ->label('Jednostka miary')
                             ->columnSpan(['lg' => 2])
@@ -98,7 +99,7 @@ class ExpenseResource extends Resource
                             ->suffix('zł')
                             ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', ExpenseItem::calculateTotal($get('price'), $get('quantity'))))
                             ->step(0.01)
                             ->minValue(0),
                         Forms\Components\TextInput::make('amount')

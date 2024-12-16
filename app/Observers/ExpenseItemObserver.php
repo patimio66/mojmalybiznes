@@ -11,7 +11,7 @@ class ExpenseItemObserver
      */
     public function creating(ExpenseItem $expenseItem): void
     {
-        $expenseItem->amount = round((($expenseItem->price ?? 0) * ((int) $expenseItem->quantity ?? 0)), 2);
+        $expenseItem->amount = ExpenseItem::calculateTotal($expenseItem->price, $expenseItem->quantity);
     }
 
     /**
@@ -27,7 +27,7 @@ class ExpenseItemObserver
      */
     public function updating(ExpenseItem $expenseItem): void
     {
-        $expenseItem->amount = round((($expenseItem->price ?? 0) * ((int) $expenseItem->quantity ?? 0)), 2);
+        $expenseItem->amount = ExpenseItem::calculateTotal($expenseItem->price, $expenseItem->quantity);
     }
 
     /**

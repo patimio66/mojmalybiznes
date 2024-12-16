@@ -5,11 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\IncomeResource\Pages;
 use App\Filament\Resources\IncomeResource\RelationManagers;
 use App\Models\Income;
+use App\Models\IncomeItem;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
 use Filament\Resources\Resource;
+use Filament\Support\RawJs;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
@@ -56,9 +58,9 @@ class IncomeResource extends Resource
                             ->numeric()
                             ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
                             ->step(0.01)
-                            ->minValue(0),
+                            ->minValue(0.01),
                         Forms\Components\Select::make('uom')
                             ->label('Jednostka miary')
                             ->columnSpan(['lg' => 2])
@@ -98,7 +100,7 @@ class IncomeResource extends Resource
                             ->suffix('zł')
                             ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', round((($get('price') ?? 0) * ((int) $get('quantity') ?? 0)), 2)))
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
                             ->step(0.01)
                             ->minValue(0),
                         Forms\Components\TextInput::make('amount')
