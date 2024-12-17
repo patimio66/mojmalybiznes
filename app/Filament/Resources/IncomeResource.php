@@ -30,6 +30,13 @@ class IncomeResource extends Resource
     {
         return $form
             ->schema([
+                Forms\Components\Select::make('contractor_id')
+                    ->label('Kontrahent')
+                    ->relationship(name: 'contractor', titleAttribute: 'name')
+                    ->searchable()
+                    ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
+                    ->editOptionForm(fn(Form $form) => ContractorResource::form($form))
+                    ->columnSpan('full'),
                 Forms\Components\TextInput::make('title')
                     ->label('Tytuł transakcji')
                     ->required()
