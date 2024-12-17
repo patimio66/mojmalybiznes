@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ContractorResource\Pages;
 use App\Filament\Resources\ContractorResource\RelationManagers;
-use App\Filament\Resources\ContractorResource\RelationManagers\IncomesRelationManager;
 use App\Models\Contractor;
 use Filament\Forms;
 use Filament\Forms\Form;
@@ -46,18 +45,15 @@ class ContractorResource extends Resource
                 Forms\Components\Group::make([
                     Forms\Components\TextInput::make('address')
                         ->label('Adres')
-                        ->maxLength(255)
-                        ->columnSpan(2),
+                        ->maxLength(255),
                     Forms\Components\TextInput::make('postal_code')
                         ->mask('99-999')
                         ->label('Kod pocztowy')
-                        ->maxLength(255)
-                        ->columnSpan(1),
+                        ->maxLength(255),
                     Forms\Components\TextInput::make('city')
                         ->label('Miasto')
-                        ->maxLength(255)
-                        ->columnSpan(1),
-                ])->columns(4),
+                        ->maxLength(255),
+                ])->columns(3),
                 Forms\Components\Group::make([
                     Forms\Components\TextInput::make('email')
                         ->label('Email')
@@ -128,7 +124,7 @@ class ContractorResource extends Resource
     public static function getRelations(): array
     {
         return [
-            IncomesRelationManager::class,
+            //
         ];
     }
 
