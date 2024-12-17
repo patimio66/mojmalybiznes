@@ -39,8 +39,8 @@ class ExpenseItem extends Model implements Sortable
         return $this->belongsTo(Expense::class);
     }
 
-    public static function calculateTotal(float $price = 0, float $quantity = 0): float
+    public static function calculateTotal(null|float|string $price = 0, null|float|string $quantity = 0): float
     {
-        return round(($price * $quantity), 2);
+        return round(((float)$price * (float)$quantity), 2);
     }
 }

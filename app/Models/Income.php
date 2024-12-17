@@ -49,9 +49,9 @@ class Income extends Model
     {
         return $items->reduce(function ($subtotal, $incomeItem) {
             if (is_array($incomeItem)) {
-                return $subtotal + round((($incomeItem['price'] ?? 0) * ($incomeItem['quantity'] ?? 0)), 2);
+                return $subtotal + round((((float)$incomeItem['price'] ?? 0) * ((float)$incomeItem['quantity'] ?? 0)), 2);
             } else {
-                return $subtotal + ($incomeItem->amount ?? 0);
+                return $subtotal + ((float)$incomeItem->amount ?? 0);
             }
         }, 0);
     }
