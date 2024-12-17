@@ -39,6 +39,11 @@ class Income extends Model
         return $this->hasMany(IncomeItem::class);
     }
 
+    public function contractor()
+    {
+        return $this->belongsTo(Contractor::class);
+    }
+
     public function updateTotal(): bool
     {
         $amount = $this->calculateTotal($this->items);
