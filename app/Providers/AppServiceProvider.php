@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use Filament\Tables\Columns\Column;
+use Filament\Tables\Table;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Table::configureUsing(function (Table $table) {
+            $table->paginated([25, 50, 100])
+                ->defaultPaginationPageOption(25);
+        });
+        Column::configureUsing(function (Column $column): void {
+            $column
+                ->toggleable();
+        });
     }
 }
