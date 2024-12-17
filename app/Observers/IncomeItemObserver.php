@@ -11,7 +11,7 @@ class IncomeItemObserver
      */
     public function creating(IncomeItem $incomeItem): void
     {
-        $incomeItem->amount = round((($incomeItem->price ?? 0) * ((int) $incomeItem->quantity ?? 0)), 2);
+        $incomeItem->amount = IncomeItem::calculateTotal($incomeItem->price, $incomeItem->quantity);
     }
 
     /**
@@ -27,7 +27,7 @@ class IncomeItemObserver
      */
     public function updating(IncomeItem $incomeItem): void
     {
-        $incomeItem->amount = round((($incomeItem->price ?? 0) * ((int) $incomeItem->quantity ?? 0)), 2);
+        $incomeItem->amount = IncomeItem::calculateTotal($incomeItem->price, $incomeItem->quantity);
     }
 
     /**

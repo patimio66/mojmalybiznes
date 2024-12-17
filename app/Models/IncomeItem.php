@@ -38,4 +38,9 @@ class IncomeItem extends Model implements Sortable
     {
         return $this->belongsTo(Income::class);
     }
+
+    public static function calculateTotal(?float $price = 0, ?float $quantity = 0): float
+    {
+        return round(($price * $quantity), 2);
+    }
 }

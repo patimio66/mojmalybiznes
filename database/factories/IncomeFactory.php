@@ -18,7 +18,7 @@ class IncomeFactory extends Factory
     {
         return [
             'title' => fake()->text(30),
-            'amount' => fake()->randomFloat(2),
+            'amount' => 0,
             'date' => now()->subDays(rand(1, 500))->format('Y-m-d'),
             'description' => (bool)rand(0, 1) ? fake()->text(50) : '',
         ];

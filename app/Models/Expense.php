@@ -49,9 +49,9 @@ class Expense extends Model
     {
         return $items->reduce(function ($subtotal, $expenseItem) {
             if (is_array($expenseItem)) {
-                return $subtotal + round((($expenseItem['price'] ?? 0) * ((int) $expenseItem['quantity'] ?? 0)), 2);
+                return $subtotal + round((((float)$expenseItem['price'] ?? 0) * ((float)$expenseItem['quantity'] ?? 0)), 2);
             } else {
-                return $subtotal + ($expenseItem->amount ?? 0);
+                return $subtotal + ((float)$expenseItem->amount ?? 0);
             }
         }, 0);
     }
