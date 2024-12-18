@@ -15,7 +15,8 @@ class IncomeLimitChart extends ChartWidget
 
     protected function getData(): array
     {
-        $thisMonth = Income::whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])->sum('amount');
+        $thisMonth = Income::whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
+->sum('amount');
         $monthlyLimit = 3225.00;
 
         return [

@@ -53,13 +53,13 @@ class ExpenseResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Tytuł pozycji')
-                            ->columnSpan(['lg' => 4])
+                            ->columnSpan(4)
                             ->required()
                             ->helperText('np.: Wosk sojowy')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('quantity')
                             ->label('Ilość')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(2)
                             ->required()
                             ->numeric()
                             ->inputMode('decimal')
@@ -69,7 +69,7 @@ class ExpenseResource extends Resource
                             ->minValue(0.01),
                         Forms\Components\Select::make('uom')
                             ->label('Jednostka miary')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(2)
                             ->required()
                             ->searchable()
                             ->default('szt.')
@@ -100,7 +100,7 @@ class ExpenseResource extends Resource
                             ]),
                         Forms\Components\TextInput::make('price')
                             ->label('Kwota')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(2)
                             ->required()
                             ->numeric()
                             ->suffix('zł')
@@ -110,7 +110,7 @@ class ExpenseResource extends Resource
                             ->step(0.01)
                             ->minValue(0),
                         Forms\Components\TextInput::make('amount')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(2)
                             ->readOnly()
                             ->dehydrated(false)
                             ->label('Suma')
@@ -131,17 +131,17 @@ class ExpenseResource extends Resource
                     ->afterStateHydrated(function (Get $get, Set $set) {
                         self::updateTotals($get, $set);
                     })
-                    ->columnSpan(['lg' => 2]),
+                    ->columnSpan(2),
                 Forms\Components\DatePicker::make('date')
                     ->label('Data sprzedaży')
                     ->default(now())
                     ->required()
-                    ->columnSpan(['lg' => 3]),
+                    ->columnSpan(3),
                 Forms\Components\TextInput::make('description')
                     ->label('Notatka')
                     ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                     ->maxLength(255)
-                    ->columnSpan(['lg' => 7]),
+                    ->columnSpan(7),
             ])
             ->columns(12);
     }
