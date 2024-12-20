@@ -2,13 +2,19 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Observers\InvoiceObserver;
 use Illuminate\Support\Collection;
+use App\Models\Scopes\UserAccessScope;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Attributes\ScopedBy;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
+#[ObservedBy(InvoiceObserver::class)]
+#[ScopedBy(UserAccessScope::class)]
 class Invoice extends Model
 {
     /** @use HasFactory<\Database\Factories\InvoiceFactory> */
@@ -16,6 +22,7 @@ class Invoice extends Model
 
     protected $fillable = [
         'user_id',
+        'income_id',
         'invoice_id', // self (parent)
         'invoice_number',
         'issue_date',

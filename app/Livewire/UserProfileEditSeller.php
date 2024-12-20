@@ -80,7 +80,7 @@ class UserProfileEditSeller extends MyProfileComponent
         $this->user->update($data);
         Notification::make()
             ->success()
-            ->title('Za pisano.')
+            ->title('Zapisano.')
             ->send();
     }
 }

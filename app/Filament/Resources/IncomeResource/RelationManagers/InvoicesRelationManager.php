@@ -8,6 +8,9 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Support\HtmlString;
+use App\Models\Invoice;
+use Filament\Notifications\Notification;
+use Illuminate\Validation\ValidationException;
 
 class InvoicesRelationManager extends RelationManager
 {
@@ -71,6 +74,22 @@ class InvoicesRelationManager extends RelationManager
                     ->label('Kupującego można też edytować na stronie przychodu.'),
                 Forms\Components\Placeholder::make('top_banner_information')
                     ->label('Sprzedającego można edytować w ustawieniach profilu.'),
+                Forms\Components\TextInput::make('invoice_number')
+                    ->label('Numer faktury')
+                    ->default(fn() => $this->generateInvoiceNumber())
+                    ->required(),
+                Forms\Components\DatePicker::make('issue_date')
+                    ->label('Data wystawienia')
+                    ->default(now())
+                    ->required(),
+                Forms\Components\DatePicker::make('transaction_date')
+                    ->label('Data transakcji')
+                    ->default(now())
+                    ->required(),
+                Forms\Components\DatePicker::make('due_date')
+                    ->label('Termin płatności')
+                    ->default(now())
+                    ->required(),
             ]);
     }
 
@@ -87,11 +106,61 @@ class InvoicesRelationManager extends RelationManager
             ->headerActions([
                 Tables\Actions\CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
-                        $data['user_id'] = auth()->id();
+                        if (empty($data['invoice_number'])) {
+                            $data['invoice_number'] = $this->generateInvoiceNumber();
+                        }
 
-                        // TODO: SET INVOICE NUMBER
+                        // Sprawdź, czy numer faktury nie jest duplikatem
+                        $existingInvoice = Invoice::where('invoice_number', $data['invoice_number'])
+                            ->count();
+
+                        if ($existingInvoice > 0) {
+                            throw ValidationException::withMessages(['mountedTableActionsData.0.invoice_number' => 'Numer faktury jest już zajęty.']);
+                        }
 
                         return $data;
+                    })
+                    ->using(function (array $data, string $model): Invoice {
+                        $income = $this->getOwnerRecord();
+                        $user = auth()->user();
+                        $contractor = $income->contractor;
+
+                        $invoice = $model::create([
+                            'invoice_number' => $data['invoice_number'],
+                            'income_id' => $income->id,
+                            'contractor_id' => $contractor->id,
+                            'issue_date' => $data['issue_date'],
+                            'transaction_date' => $data['transaction_date'],
+                            'due_date' => $data['due_date'],
+                            'description' => $income->description,
+                            'amount' => $income->amount,
+                            'tax_exemption_type' => 'objective',
+                            'is_paid' => false,
+                            'user_id' => $user->id,
+                            'seller_name' => $user->seller_name,
+                            'seller_tax_id' => $user->seller_tax_id,
+                            'seller_country' => $user->seller_country,
+                            'seller_city' => $user->seller_city,
+                            'seller_postal_code' => $user->seller_postal_code,
+                            'seller_address' => $user->seller_address,
+                            'seller_email' => $user->seller_email,
+                            'seller_phone' => $user->seller_phone,
+                            'contractor_name' => $contractor->name,
+                            'contractor_tax_id' => $contractor->tax_id,
+                            'contractor_country' => $contractor->country,
+                            'contractor_city' => $contractor->city,
+                            'contractor_postal_code' => $contractor->postal_code,
+                            'contractor_address' => $contractor->address,
+                            'contractor_email' => $contractor->email,
+                            'contractor_phone' => $contractor->phone,
+                        ]);
+
+                        // Add InvoiceItem to the Invoice by copying from Income
+                        foreach ($income->items as $item) {
+                            $invoice->items()->create($item->toArray());
+                        }
+
+                        return $invoice;
                     }),
             ])
             ->actions([
@@ -103,5 +172,21 @@ class InvoicesRelationManager extends RelationManager
                 //     Tables\Actions\DeleteBulkAction::make(),
                 // ]),
             ]);
+    }
+
+    protected function generateInvoiceNumber(): string
+    {
+        $currentMonth = now()->format('m');
+        $currentYear = now()->format('Y');
+        $lastInvoice = Invoice::where('user_id', auth()->id())
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->orderBy('invoice_number', 'desc')
+            ->first();
+
+        $lastNumber = $lastInvoice ? intval(explode('/', $lastInvoice->invoice_number)[0]) : 0;
+        $newNumber = $lastNumber + 1;
+
+        return sprintf('%d/%s/%s', $newNumber, $currentMonth, $currentYear);
     }
 }
