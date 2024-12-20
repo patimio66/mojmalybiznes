@@ -2,18 +2,11 @@
 
 namespace App\Filament\Resources\IncomeResource\RelationManagers;
 
-use App\Filament\Resources\ContractorResource;
-use App\Models\Contractor;
 use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Forms\Get;
-use Filament\Forms\Set;
-use Filament\Infolists;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\HtmlString;
 
 class InvoicesRelationManager extends RelationManager
@@ -54,52 +47,30 @@ class InvoicesRelationManager extends RelationManager
                         Forms\Components\Fieldset::make('seller_details')
                             ->label('Dane sprzedającego')
                             ->schema([
-                                Forms\Components\TextInput::make('seller_name')
-                                    ->label('Imię i nazwisko')
-                                    ->default(auth()->user()->name)
-                                    ->required()
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('seller_tax_id')
-                                    ->label('Numer podatkowy')
-                                    ->helperText('np. NIP lub PESEL')
-                                    ->maxLength(255),
-                                Forms\Components\Select::make('seller_country')
-                                    ->label('Kraj')
-                                    ->helperText('Obecnie obsługujemy tylko Polskę')
-                                    ->required()
-                                    ->options([
-                                        'pl' => 'Polska'
-                                    ])
-                                    ->default('pl'),
-                                Forms\Components\TextInput::make('seller_address')
-                                    ->label('Adres')
-                                    ->maxLength(255),
-                                Forms\Components\Group::make([
-                                    Forms\Components\TextInput::make('seller_postal_code')
-                                        ->mask('99-999')
-                                        ->label('Kod pocztowy')
-                                        ->maxLength(255),
-                                    Forms\Components\TextInput::make('seller_city')
-                                        ->label('Miasto')
-                                        ->maxLength(255),
-                                ])
-                                    ->columns(2),
-                                Forms\Components\Group::make([
-                                    Forms\Components\TextInput::make('seller_email')
-                                        ->label('Email')
-                                        ->email()
-                                        ->maxLength(255),
-                                    Forms\Components\TextInput::make('seller_phone')
-                                        ->label('Telefon')
-                                        ->tel()
-                                        ->maxLength(255),
-                                ])
-                                    ->columns(2),
+                                Forms\Components\Placeholder::make('seller_data')
+                                    ->label('')
+                                    ->content(function () {
+                                        $user = auth()->user();
+                                        $contractorData = collect([
+                                            $user->seller_name,
+                                            $user->seller_tax_id,
+                                            $user->seller_address,
+                                            trim($user->seller_postal_code . ' ' . $user->seller_city),
+                                            $user->seller_email,
+                                            $user->seller_phone,
+                                        ]);
+
+                                        return new HtmlString($contractorData->filter()->implode('<br>'));
+                                    }),
                             ])
                             ->columns(1)
                             ->columnSpan(1),
                     ])
                     ->columns(2),
+                Forms\Components\Placeholder::make('top_banner_information')
+                    ->label('Kupującego można też edytować na stronie przychodu.'),
+                Forms\Components\Placeholder::make('top_banner_information')
+                    ->label('Sprzedającego można edytować w ustawieniach profilu.'),
             ]);
     }
 
@@ -117,6 +88,8 @@ class InvoicesRelationManager extends RelationManager
                 Tables\Actions\CreateAction::make()
                     ->mutateFormDataUsing(function (array $data): array {
                         $data['user_id'] = auth()->id();
+
+                        // TODO: SET INVOICE NUMBER
 
                         return $data;
                     }),
