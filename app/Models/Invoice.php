@@ -67,6 +67,11 @@ class Invoice extends Model
         return $this->belongsTo(Contractor::class);
     }
 
+    public function income(): BelongsTo
+    {
+        return $this->belongsTo(Income::class);
+    }
+
     /**
      * Parent relationship: this invoice belongs to another invoice
      * Usage: $parent = $invoice->parent;

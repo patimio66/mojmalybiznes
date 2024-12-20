@@ -17,6 +17,9 @@ class InvoiceResource extends Resource
 {
     protected static ?string $model = Invoice::class;
 
+    protected static ?string $modelLabel = 'Faktura';
+    protected static ?string $pluralModelLabel = 'Faktury';
+
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
@@ -176,8 +179,8 @@ class InvoiceResource extends Resource
     {
         return [
             'index' => Pages\ListInvoices::route('/'),
-            'create' => Pages\CreateInvoice::route('/create'),
-            'edit' => Pages\EditInvoice::route('/{record}/edit'),
+            // 'create' => Pages\CreateInvoice::route('/create'),
+            // 'edit' => Pages\EditInvoice::route('/{record}/edit'),
         ];
     }
 }
