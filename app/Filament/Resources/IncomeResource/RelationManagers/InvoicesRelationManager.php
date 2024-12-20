@@ -44,7 +44,6 @@ class InvoicesRelationManager extends RelationManager
                                             trim($contractor->postal_code . ' ' . $contractor->city),
                                             $contractor->email,
                                             $contractor->phone,
-                                            $contractor->notes,
                                         ]);
 
                                         return new HtmlString($contractorData->filter()->implode('<br>'));
@@ -64,13 +63,14 @@ class InvoicesRelationManager extends RelationManager
                                     ->label('Numer podatkowy')
                                     ->helperText('np. NIP lub PESEL')
                                     ->maxLength(255),
-                                // Forms\Components\Select::make('seller_country')
-                                //     ->label('Kraj')
-                                //     ->required()
-                                //     ->options([
-                                //         'pl' => 'Polska'
-                                //     ])
-                                //     ->default('pl'),
+                                Forms\Components\Select::make('seller_country')
+                                    ->label('Kraj')
+                                    ->helperText('Obecnie obsługujemy tylko Polskę')
+                                    ->required()
+                                    ->options([
+                                        'pl' => 'Polska'
+                                    ])
+                                    ->default('pl'),
                                 Forms\Components\TextInput::make('seller_address')
                                     ->label('Adres')
                                     ->maxLength(255),
