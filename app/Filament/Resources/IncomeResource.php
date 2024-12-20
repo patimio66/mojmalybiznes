@@ -45,19 +45,6 @@ class IncomeResource extends Resource
                             ->searchable()
                             ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
                             ->editOptionForm(fn(Form $form) => ContractorResource::form($form))
-                            // ->afterStateUpdated(function (Get $get, Set $set) {
-                            //     $contractor = Contractor::find($get('contractor_id'));
-                            //     if ($contractor) {
-                            //         $set('contractor_name', $contractor->name);
-                            //         $set('contractor_tax_id', $contractor->tax_id);
-                            //         $set('contractor_country', $contractor->country);
-                            //         $set('contractor_address', $contractor->address);
-                            //         $set('contractor_postal_code', $contractor->postal_code);
-                            //         $set('contractor_city', $contractor->city);
-                            //         $set('contractor_email', $contractor->email);
-                            //         $set('contractor_phone', $contractor->phone);
-                            //     }
-                            // })
                             ->columnSpan('full'),
                         Forms\Components\TextInput::make('title')
                             ->label('Tytuł transakcji')
