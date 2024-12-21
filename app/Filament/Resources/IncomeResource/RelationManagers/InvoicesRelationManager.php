@@ -16,6 +16,7 @@ use Illuminate\Validation\ValidationException;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\Modal\Actions\ButtonAction;
+use Nette\Utils\Html;
 
 class InvoicesRelationManager extends RelationManager
 {
@@ -31,6 +32,26 @@ class InvoicesRelationManager extends RelationManager
             ->schema([
                 Forms\Components\Grid::make()
                     ->schema([
+                        Forms\Components\Section::make('Uwaga. Tworzysz fakturę korygującą.')
+                            ->description('Faktura korygująca jest dokumentem, który służy do poprawienia błędów w fakturze pierwotnej. Zmień wartości pozycji w Przychodzie, a następnie wypełnij poniższe pola.')
+                            ->hidden(fn(): bool => $this->getOwnerRecord()->invoices()->count() == 0 ? true : false)
+                            ->schema([
+                                Forms\Components\Placeholder::make('corrective_invoice_conditions')
+                                    ->label('Fakturę korygującą wystawiasz tylko wtedy, gdy po wystawieniu faktury pierwotnej:')
+                                    ->content(new HtmlString('
+<ul class="list-disc list-inside">
+<li>stwierdziłeś pomyłkę w cenie, stawce, kwocie podatku lub w jakiejkolwiek innej pozycji faktury</li>
+<li>udzielasz obniżki ceny w formie rabatu</li>
+<li>nabywca zwrócił ci towar</li>
+<li>zwróciłeś nabywcy całość lub części zapłaty</li>
+<li>wystawiłeś fakturę bez adnotacji „mechanizm podzielonej płatności”, mimo iż miałeś taki obowiązek.</li>
+</ul>
+<p class="mt-2 text-xs text-gray-500 dark:text-gray-400">Źródło: <a href="https://www.biznes.gov.pl/pl/portal/00228" class="hover:underline">https://www.biznes.gov.pl/pl/portal/00228</a></p>
+'))
+                                    ->columnSpan('full'),
+                            ])
+                            ->collapsed()
+                            ->columnSpan('full'),
                         Forms\Components\Fieldset::make('contractor_details')
                             ->label('Dane kupującego')
                             ->schema([
@@ -75,9 +96,9 @@ class InvoicesRelationManager extends RelationManager
                             ->columnSpan(1),
                     ])
                     ->columns(2),
-                Forms\Components\Placeholder::make('top_banner_information')
+                Forms\Components\Placeholder::make('edit_customer_information')
                     ->label('Kupującego można edytować na stronie przychodu.'),
-                Forms\Components\Placeholder::make('top_banner_information')
+                Forms\Components\Placeholder::make('edit_seller_information')
                     ->label('Sprzedawcę można edytować w ustawieniach profilu.'),
                 Forms\Components\Radio::make('tax_exemption_type')
                     ->label('Zwolnienie podatkowe')
@@ -98,12 +119,13 @@ class InvoicesRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\DatePicker::make('transaction_date')
                     ->label('Data transakcji')
-                    ->default(now())
+                    ->default(fn() => $this->getOwnerRecord()->date ?? now())
                     ->required(),
                 Forms\Components\DatePicker::make('due_date')
                     ->label('Termin płatności')
-                    ->default(now())
+                    ->default(fn() => $this->getOwnerRecord()->date->addWeek() ?? now()->addWeek())
                     ->required(),
+                // Todo: Move is_paid from Invoice to Income (perserve $invoice->is_paid but add $income->is_paid and add it as default value)
                 Forms\Components\Toggle::make('is_paid')
                     ->label('Opłacona')
                     ->required(),
@@ -116,6 +138,15 @@ class InvoicesRelationManager extends RelationManager
             ->recordTitleAttribute('invoice_number')
             ->columns([
                 Tables\Columns\TextColumn::make('invoice_number'),
+                Tables\Columns\TextColumn::make('invoice_type')
+                    ->label('Rodzaj')
+                    ->badge()
+                    ->state(function (Invoice $invoice) {
+                        return $invoice->invoice_id ? 'faktura korygująca' : 'faktura pierwotna';
+                    })
+                    ->color(function (Invoice $invoice) {
+                        return $invoice->invoice_id ? 'warning' : 'primary';
+                    }),
             ])
             ->filters([
                 //

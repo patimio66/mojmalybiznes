@@ -64,12 +64,12 @@ class Income extends Model
 
     public static function calculateTotal(Collection $items): float
     {
-        return $items->reduce(function ($subtotal, $incomeItem) {
+        return round($items->reduce(function ($subtotal, $incomeItem) {
             if (is_array($incomeItem)) {
                 return $subtotal + round((((float)$incomeItem['price'] ?? 0) * ((float)$incomeItem['quantity'] ?? 0)), 2);
             } else {
-                return $subtotal + ((float)$incomeItem->amount ?? 0);
+                return $subtotal + round(((float)$incomeItem->amount ?? 0), 2);
             }
-        }, 0);
+        }, 0), 2);
     }
 }
