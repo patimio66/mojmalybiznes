@@ -2,22 +2,22 @@
 
 namespace Database\Factories;
 
+use App\Models\InvoiceItem;
+use App\Models\Invoice;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\InvoiceItem>
- */
 class InvoiceItemFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    protected $model = InvoiceItem::class;
+
+    public function definition()
     {
         return [
-            //
+            'invoice_id' => Invoice::factory(),
+            'title' => $this->faker->word,
+            'quantity' => $this->faker->randomFloat(2, 1, 100),
+            'uom' => $this->faker->randomElement(['szt', 'kg', 'm']),
+            'price' => $this->faker->randomFloat(2, 10, 1000),
         ];
     }
 }

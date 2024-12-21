@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use Illuminate\Support\Str;
 use App\Observers\InvoiceObserver;
 use Illuminate\Support\Collection;
 use App\Models\Scopes\UserAccessScope;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,10 +14,11 @@ use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Spatie\MediaLibrary\HasMedia;
 
 #[ObservedBy(InvoiceObserver::class)]
 #[ScopedBy(UserAccessScope::class)]
-class Invoice extends Model
+class Invoice extends Model implements HasMedia
 {
     /** @use HasFactory<\Database\Factories\InvoiceFactory> */
     use HasFactory, InteractsWithMedia;
@@ -69,6 +72,11 @@ class Invoice extends Model
         return $this->hasMany(InvoiceItem::class);
     }
 
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function contractor(): BelongsTo
     {
         return $this->belongsTo(Contractor::class);
@@ -116,5 +124,20 @@ class Invoice extends Model
                 return $subtotal + ((float)$invoiceItem->amount ?? 0);
             }
         }, 0);
+    }
+
+    public function download()
+    {
+        $file = $this->getFirstMedia();
+        if (!$file) {
+            $pdf = SnappyPdf::loadView('invoices.pdf', ['invoice' => $this]);
+            // Windows fix
+            $pdf->setTemporaryFolder(storage_path('app\\temp'));
+            // use laravel-medialibrary to store the pdf
+            $this->addMediaFromStream($pdf->output())
+                ->toMediaCollection();
+            $file = $this->getFirstMedia();
+        }
+        return response()->download($file->getPath(), 'invoice-' . Str::replace(['/', '\\'], '-', $this->invoice_number) . '.pdf');
     }
 }

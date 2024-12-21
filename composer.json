@@ -7,13 +7,16 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "barryvdh/laravel-snappy": "^1.0",
         "filament/filament": "^3.2",
         "filament/spatie-laravel-media-library-plugin": "^3.2",
         "flowframe/laravel-trend": "^0.3.0",
         "jeffgreco13/filament-breezy": "^2.4",
         "laravel/framework": "^11.31",
         "laravel/tinker": "^2.9",
-        "spatie/eloquent-sortable": "^4.4"
+        "league/flysystem-aws-s3-v3": "^3.0",
+        "spatie/eloquent-sortable": "^4.4",
+        "spatie/laravel-medialibrary": "^11.11"
     },
     "require-dev": {
         "doctrine/dbal": "^4.2",

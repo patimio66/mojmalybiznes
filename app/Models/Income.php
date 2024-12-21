@@ -20,6 +20,7 @@ class Income extends Model
     use HasFactory;
 
     protected $fillable = [
+        'contractor_id',
         'user_id',
         'title',
         'amount',
@@ -38,6 +39,11 @@ class Income extends Model
     public function items(): HasMany
     {
         return $this->hasMany(IncomeItem::class);
+    }
+
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function contractor(): BelongsTo

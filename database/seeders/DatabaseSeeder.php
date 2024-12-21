@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Contractor;
 use App\Models\Expense;
 use App\Models\ExpenseItem;
 use App\Models\User;
@@ -18,29 +19,22 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::factory()
-            ->create([
-                'name' => 'John Doe',
-                'email' => 'test@example.com',
-            ]);
+        if (User::count() === 0) {
+            $user = User::factory()
+                ->create([
+                    'name' => 'John Doe',
+                    'email' => 'test@example.com',
+                ]);
+        } else {
+            $user = User::first();
+        }
         Auth::login($user);
+        Contractor::factory(10)->create();
 
-        Income::factory(100)->hasItems(IncomeItem::factory()->count(rand(1, 10)))->create();
-
-        Income::all()->each(function (Income $income) {
-            $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
-                return $subtotal + ($incomeItem->amount ?? 0);
-            }, 0);
-            $income->save();
-        });
-
-        Expense::factory(100)->hasItems(ExpenseItem::factory()->count(rand(1, 10)))->create();
-
-        Expense::all()->each(function (Expense $income) {
-            $income->amount = $income->items->reduce(function ($subtotal, $incomeItem) {
-                return $subtotal + ($incomeItem->amount ?? 0);
-            }, 0);
-            $income->save();
-        });
+        $users = User::factory(99)->create();
+        foreach ($users as $user) {
+            Auth::login($user);
+            Contractor::factory(10)->create();
+        }
     }
 }
