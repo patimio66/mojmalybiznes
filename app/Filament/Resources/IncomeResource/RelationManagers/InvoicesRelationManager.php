@@ -144,7 +144,7 @@ class InvoicesRelationManager extends RelationManager
                         $parentInvoice = $income->invoices()->orderBy('created_at', 'desc')->first();
 
                         $invoice = $model::create([
-                            'invoice_id' => $parentInvoice->id,
+                            'invoice_id' => $parentInvoice?->id ?? null,
                             'invoice_number' => $data['invoice_number'],
                             'income_id' => $income->id,
                             'contractor_id' => $contractor->id,
@@ -181,10 +181,10 @@ class InvoicesRelationManager extends RelationManager
 
                         $pdf = SnappyPdf::loadView('invoices.pdf', ['invoice' => $invoice]);
                         // Windows fix
-                        $pdf->setTemporaryFolder(storage_path('snappy'));
+                        $pdf->setTemporaryFolder(storage_path('app\\temp'));
                         // use laravel-medialibrary to store the pdf
                         $invoice->addMediaFromStream($pdf->output())
-                            ->usingFileName('user-' . $user->id . '-invoice_id-' . $invoice->id . '-invoice_number-' . Str::replace(['/', '\\'], '-', $invoice->invoice_number) . '.pdf')
+                            ->usingFileName('user:' . $user->id . '-invoice_id:' . $invoice->id . '-invoice_number:' . Str::replace(['/', '\\'], '-', $invoice->invoice_number) . '.pdf')
                             ->toMediaCollection();
 
                         return $invoice;

@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\HasMedia;
 
 #[ObservedBy(InvoiceObserver::class)]
@@ -138,6 +139,7 @@ class Invoice extends Model implements HasMedia
                 ->toMediaCollection();
             $file = $this->getFirstMedia();
         }
-        return response()->download($file->getPath(), 'invoice-' . Str::replace(['/', '\\'], '-', $this->invoice_number) . '.pdf');
+        $file_name = 'invoice-' . Str::replace(['/', '\\'], '-', $this->invoice_number) . '.pdf';
+        return Storage::disk('r2')->download($file->getPath(), $file_name);
     }
 }

@@ -89,7 +89,18 @@
       <table>
         <tr>
           <td>
-            <h2>Faktura #: {{ $invoice->invoice_number }}</h2>
+            <h2>Faktura {{ $invoice->parent ? 'korygująca ' : '' }} nr: {{ $invoice->invoice_number }}</h2>
+            @if ($invoice->parent)
+              <p>Numer ostatniej faktury korygującej: {{ $invoice->parent->invoice_number }}</p>
+              @php
+                $currentInvoice = $invoice;
+                while ($currentInvoice->parent) {
+                    $currentInvoice = $currentInvoice->parent;
+                }
+                $lastParentInvoiceNumber = $currentInvoice->invoice_number;
+              @endphp
+              <p>Dotyczy faktury pierwotnej nr: {{ $lastParentInvoiceNumber }}</p>
+            @endif
             <p>Data wystawienia: {{ $invoice->issue_date->format('d.m.Y') }}</p>
             <p>Data transakcji: {{ $invoice->transaction_date->format('d.m.Y') }}</p>
             <p>Termin płatności: {{ $invoice->due_date->format('d.m.Y') }}</p>
@@ -107,6 +118,62 @@
       </table>
     </div>
 
+    @if ($invoice->parent)
+      <hr><br>
+      <p style="font-weight:700; margin-bottom: 6px; text-align:center">PRZED KOREKTĄ</p>
+      <div class="buyer">
+        <table>
+          <tr>
+            <td>
+              <h3>Dane kupującego:</h3>
+              <p>{{ $invoice->contractor_name }}</p>
+              <p>{{ $invoice->contractor_address }}</p>
+              <p>{{ $invoice->contractor_postal_code }} {{ $invoice->contractor_city }}</p>
+              <p>{{ $invoice->contractor_country }}</p>
+              <p>{{ $invoice->contractor_email }}</p>
+              <p>{{ $invoice->contractor_phone }}</p>
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div class="items">
+        <table>
+          <thead>
+            <tr>
+              <th class="title">Tytuł</th>
+              <th>Ilość</th>
+              <th>J.m.</th>
+              <th>Cena jednostkowa</th>
+              <th>Wartość</th>
+            </tr>
+          </thead>
+          <tbody>
+            @foreach ($invoice->parent->items as $item)
+              <tr>
+                <td class="title">{{ $item->title }}</td>
+                <td>{{ number_format($item->quantity, 2) }}</td>
+                <td>{{ $item->uom }}</td>
+                <td>{{ number_format($item->price, 2) }} zł</td>
+                <td>{{ number_format($item->amount, 2) }} zł</td>
+              </tr>
+            @endforeach
+            <tr class="total">
+              <td colspan="4">Suma:</td>
+              <td>{{ number_format($invoice->parent->amount, 2) }} zł</td>
+            </tr>
+            <tr class="total">
+              <td colspan="4">Zapłacono:</td>
+              <td>{{ $invoice->parent->is_paid ? number_format($invoice->parent->amount, 2) : '0.00' }} zł</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    @endif
+
+    @if ($invoice->parent)
+      <hr><br>
+      <p style="font-weight:700; margin-bottom: 6px; text-align:center">PO KOREKCIE</p>
+    @endif
     <div class="buyer">
       <table>
         <tr>
@@ -122,7 +189,6 @@
         </tr>
       </table>
     </div>
-
     <div class="items">
       <table>
         <thead>
@@ -155,6 +221,7 @@
         </tbody>
       </table>
     </div>
+
     @if ($invoice->tax_excemption_type == 'objective')
       <p>Sprzedawca zwolniony z VAT ze względu na nieprzekroczenie 200 000 PLN obrotu, tj. na podstawie art. 113 ust 1 i 9 ustawy o VAT.</p>
     @endif

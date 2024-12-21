@@ -31,7 +31,7 @@ class DatabaseSeeder extends Seeder
         Auth::login($user);
         Contractor::factory(10)->create();
 
-        $users = User::factory(99)->create();
+        $users = User::factory(9)->create();
         foreach ($users as $user) {
             Auth::login($user);
             Contractor::factory(10)->create();
