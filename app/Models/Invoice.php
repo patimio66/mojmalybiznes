@@ -32,7 +32,8 @@ class Invoice extends Model implements HasMedia
         'issue_date',
         'transaction_date',
         'due_date',
-        'description',
+        'title',
+        'notes',
         'amount',
         'tax_exemption_type',
         'is_paid',
@@ -55,6 +56,7 @@ class Invoice extends Model implements HasMedia
         'seller_address',
         'seller_email',
         'seller_phone',
+        'correction_reason',
     ];
 
     protected function casts(): array

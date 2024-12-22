@@ -182,7 +182,7 @@ class InvoicesRelationManager extends RelationManager
                             'issue_date' => $data['issue_date'],
                             'transaction_date' => $data['transaction_date'],
                             'due_date' => $data['due_date'],
-                            'description' => $income->description,
+                            'notes' => $income->notes,
                             'amount' => $income->amount,
                             'tax_exemption_type' => $data['tax_exemption_type'],
                             'is_paid' => $data['is_paid'],

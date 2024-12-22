@@ -28,6 +28,7 @@ class IncomeResource extends Resource
 
     protected static ?string $modelLabel = 'Przychód';
     protected static ?string $pluralModelLabel = 'Przychody';
+    protected static ?string $navigationGroup = 'Zyski';
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
 
@@ -147,7 +148,7 @@ class IncomeResource extends Resource
                             ->default(now())
                             ->required()
                             ->columnSpan(3),
-                        Forms\Components\TextInput::make('description')
+                        Forms\Components\TextInput::make('notes')
                             ->label('Notatka')
                             ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                             ->maxLength(255)
@@ -174,7 +175,7 @@ class IncomeResource extends Resource
                     ->label('Data sprzedaży')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('notes')
                     ->label('Notatka')
                     ->limit(50)
                     ->searchable(),

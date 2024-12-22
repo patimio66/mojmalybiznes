@@ -25,7 +25,8 @@ class Income extends Model
         'title',
         'amount',
         'date',
-        'description',
+        'notes',
+        'is_paid',
     ];
 
     protected function casts(): array
@@ -33,6 +34,7 @@ class Income extends Model
         return [
             'amount' => 'decimal:2',
             'date' => 'date',
+            'is_paid' => 'boolean',
         ];
     }
 

@@ -20,11 +20,12 @@ class Expense extends Model
     use HasFactory;
 
     protected $fillable = [
+        'contractor_id',
         'user_id',
         'title',
         'amount',
         'date',
-        'description',
+        'notes',
     ];
 
     protected function casts(): array

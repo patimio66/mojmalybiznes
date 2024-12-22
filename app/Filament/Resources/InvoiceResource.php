@@ -19,8 +19,9 @@ class InvoiceResource extends Resource
 
     protected static ?string $modelLabel = 'Faktura';
     protected static ?string $pluralModelLabel = 'Faktury';
+    protected static ?string $navigationGroup = 'Zyski';
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-document-currency-dollar';
 
     public static function form(Form $form): Form
     {
@@ -40,7 +41,7 @@ class InvoiceResource extends Resource
                     ->required(),
                 Forms\Components\DatePicker::make('due_date')
                     ->required(),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\TextInput::make('notes')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('amount')
                     ->required()
@@ -99,7 +100,7 @@ class InvoiceResource extends Resource
                 Tables\Columns\TextColumn::make('due_date')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('notes')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()

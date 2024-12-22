@@ -19,7 +19,7 @@ class IncomeFactory extends Factory
             'title' => fake()->text(30),
             'amount' => 0,
             'date' => now()->subDays(rand(1, 500))->format('Y-m-d'),
-            'description' => (bool)rand(0, 1) ? fake()->text(50) : '',
+            'notes' => (bool)rand(0, 1) ? fake()->text(50) : null,
         ];
     }
 

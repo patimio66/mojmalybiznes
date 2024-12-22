@@ -22,6 +22,7 @@ class ExpenseResource extends Resource
 
     protected static ?string $modelLabel = 'Wydatek';
     protected static ?string $pluralModelLabel = 'Wydatki';
+    protected static ?string $navigationGroup = 'Straty';
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-down';
 
@@ -31,6 +32,7 @@ class ExpenseResource extends Resource
             ->schema([
                 Forms\Components\Select::make('contractor_id')
                     ->label('Kontrahent')
+                    ->required()
                     ->relationship(name: 'contractor', titleAttribute: 'name')
                     ->searchable()
                     ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
@@ -137,7 +139,7 @@ class ExpenseResource extends Resource
                     ->default(now())
                     ->required()
                     ->columnSpan(3),
-                Forms\Components\TextInput::make('description')
+                Forms\Components\TextInput::make('notes')
                     ->label('Notatka')
                     ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                     ->maxLength(255)
@@ -162,7 +164,7 @@ class ExpenseResource extends Resource
                     ->label('Data sprzedaży')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('notes')
                     ->label('Notatka')
                     ->limit(50)
                     ->searchable(),
