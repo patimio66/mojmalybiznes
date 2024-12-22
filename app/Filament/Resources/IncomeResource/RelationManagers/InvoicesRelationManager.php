@@ -195,11 +195,11 @@ class InvoicesRelationManager extends RelationManager
                             'issue_date' => $data['issue_date'],
                             'transaction_date' => $data['transaction_date'],
                             'due_date' => $data['due_date'],
+                            'is_paid' => $income->is_paid,
                             'title' => $income->title,
                             'notes' => $income->notes,
                             'amount' => $income->amount,
                             'tax_exemption_type' => $data['tax_exemption_type'],
-                            'is_paid' => $data['is_paid'],
                             'user_id' => $user->id,
                             'seller_name' => $user->seller_name ?? $user->name,
                             'seller_tax_id' => $user->seller_tax_id,
@@ -251,7 +251,7 @@ class InvoicesRelationManager extends RelationManager
                     ->icon('heroicon-c-document-arrow-down')
                     ->action(fn(Invoice $invoice) => $invoice->download()),
                 // Tables\Actions\EditAction::make(),
-                // Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 // Tables\Actions\BulkActionGroup::make([

@@ -147,7 +147,7 @@ class InvoiceResource extends Resource
                     ->label('Pobierz')
                     ->icon('heroicon-c-document-arrow-down')
                     ->action(fn(Invoice $invoice) => $invoice->download()),
-                // Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
