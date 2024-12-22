@@ -119,8 +119,8 @@
     </div>
 
     @if ($invoice->parent)
-      <hr><br>
-      <p style="font-weight:700; margin-bottom: 6px; text-align:center">PRZED KOREKTĄ</p>
+      <hr>
+      <p style="font-weight:700; margin-bottom: 6px; margin-top: 6px; text-align:center">PRZED KOREKTĄ</p>
       <div class="buyer">
         <table>
           <tr>
@@ -136,6 +136,7 @@
           </tr>
         </table>
       </div>
+      <p style="font-weight:500; margin-bottom: 6px; font-size:15px">{{ $invoice->title }}</p>
       <div class="items">
         <table>
           <thead>
@@ -171,8 +172,8 @@
     @endif
 
     @if ($invoice->parent)
-      <hr><br>
-      <p style="font-weight:700; margin-bottom: 6px; text-align:center">PO KOREKCIE</p>
+      <hr>
+      <p style="font-weight:700; margin-bottom: 6px; margin-top: 6px; text-align:center">PO KOREKCIE</p>
     @endif
     <div class="buyer">
       <table>
@@ -189,6 +190,7 @@
         </tr>
       </table>
     </div>
+    <p style="font-weight:500; margin-bottom: 6px; font-size:15px">{{ $invoice->title }}</p>
     <div class="items">
       <table>
         <thead>

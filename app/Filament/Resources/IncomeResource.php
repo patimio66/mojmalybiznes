@@ -36,127 +36,127 @@ class IncomeResource extends Resource
     {
         return $form
             ->schema([
-
-                Forms\Components\Grid::make()
+                Forms\Components\Select::make('contractor_id')
+                    ->label('Kontrahent')
+                    ->required()
+                    ->relationship(name: 'contractor', titleAttribute: 'name')
+                    ->searchable()
+                    ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
+                    ->editOptionForm(fn(Form $form) => ContractorResource::form($form))
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
+                Forms\Components\TextInput::make('title')
+                    ->label('Tytuł transakcji')
+                    ->required()
+                    ->helperText('np.: Zamówienie świec zapachowych')
+                    ->maxLength(255)
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
+                Forms\Components\Repeater::make('items')
+                    ->relationship()
+                    ->label('Pozycje')
+                    ->columns(12)
+                    ->live(onBlur: true)
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
                     ->schema([
-                        Forms\Components\Select::make('contractor_id')
-                            ->label('Kontrahent')
-                            ->required()
-                            ->relationship(name: 'contractor', titleAttribute: 'name')
-                            ->searchable()
-                            ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
-                            ->editOptionForm(fn(Form $form) => ContractorResource::form($form))
-                            ->columnSpan('full'),
                         Forms\Components\TextInput::make('title')
-                            ->label('Tytuł transakcji')
+                            ->label('Tytuł pozycji')
+                            ->columnSpan(['default' => 1, 'lg' => 4])
                             ->required()
-                            ->helperText('np.: Zamówienie świec zapachowych')
-                            ->maxLength(255)
-                            ->columnSpan('full'),
-                        Forms\Components\Repeater::make('items')
-                            ->relationship()
-                            ->label('Pozycje')
-                            ->columns(12)
+                            ->helperText('np.: Świeca o zapachu lawendowym')
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('quantity')
+                            ->label('Ilość')
+                            ->columnSpan(['default' => 1, 'lg' => 2])
+                            ->required()
+                            ->numeric()
+                            ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (Get $get, Set $set) {
-                                self::updateTotals($get, $set);
-                            })
-                            ->schema([
-                                Forms\Components\TextInput::make('title')
-                                    ->label('Tytuł pozycji')
-                                    ->columnSpan(4)
-                                    ->required()
-                                    ->helperText('np.: Świeca o zapachu lawendowym')
-                                    ->maxLength(255),
-                                Forms\Components\TextInput::make('quantity')
-                                    ->label('Ilość')
-                                    ->columnSpan(2)
-                                    ->required()
-                                    ->numeric()
-                                    ->inputMode('decimal')
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
-                                    ->step(0.01)
-                                    ->minValue(0.01),
-                                Forms\Components\Select::make('uom')
-                                    ->label('Jednostka miary')
-                                    ->columnSpan(2)
-                                    ->required()
-                                    ->searchable()
-                                    ->default('szt.')
-                                    ->options([
-                                        'szt.',
-                                        "pcs.",
-                                        "zest.",
-                                        "set",
-                                        "kg",
-                                        "t",
-                                        "g",
-                                        "m",
-                                        "cm",
-                                        "mm",
-                                        "m",
-                                        'm²',
-                                        'm³',
-                                        "l",
-                                        "ml",
-                                        "m³",
-                                        "godz.",
-                                        "h",
-                                        "min",
-                                        "dni",
-                                        "opak.",
-                                        "karton",
-                                        "paleta",
-                                    ]),
-                                Forms\Components\TextInput::make('price')
-                                    ->label('Kwota')
-                                    ->columnSpan(2)
-                                    ->required()
-                                    ->numeric()
-                                    ->suffix('zł')
-                                    ->inputMode('decimal')
-                                    ->live(onBlur: true)
-                                    ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
-                                    ->step(0.01)
-                                    ->minValue(0),
-                                Forms\Components\TextInput::make('amount')
-                                    ->columnSpan(2)
-                                    ->readOnly()
-                                    ->dehydrated(false)
-                                    ->label('Suma')
-                                    ->numeric()
-                                    ->suffix('zł')
-                                    ->minValue(0),
-                            ])
-                            ->minItems(1)
-                            ->reorderableWithButtons()
-                            ->orderColumn('order_column')
-                            ->cloneable()
-                            ->columnSpan('full'),
-                        Forms\Components\TextInput::make('amount')
-                            ->label('Suma transakcji')
-                            ->readOnly()
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
+                            ->step(0.01)
+                            ->minValue(0.01),
+                        Forms\Components\Select::make('uom')
+                            ->label('Jednostka miary')
+                            ->columnSpan(['default' => 1, 'lg' => 2])
+                            ->required()
+                            ->searchable()
+                            ->default('szt.')
+                            ->options([
+                                'szt.',
+                                "pcs.",
+                                "zest.",
+                                "set",
+                                "kg",
+                                "t",
+                                "g",
+                                "m",
+                                "cm",
+                                "mm",
+                                "m",
+                                'm²',
+                                'm³',
+                                "l",
+                                "ml",
+                                "m³",
+                                "godz.",
+                                "h",
+                                "min",
+                                "dni",
+                                "opak.",
+                                "karton",
+                                "paleta",
+                            ]),
+                        Forms\Components\TextInput::make('price')
+                            ->label('Kwota')
+                            ->columnSpan(['default' => 1, 'lg' => 2])
+                            ->required()
+                            ->numeric()
                             ->suffix('zł')
+                            ->inputMode('decimal')
                             ->live(onBlur: true)
-                            ->afterStateHydrated(function (Get $get, Set $set) {
-                                self::updateTotals($get, $set);
-                            })
-                            ->columnSpan(2),
-                        Forms\Components\DatePicker::make('date')
-                            ->label('Data sprzedaży')
-                            ->default(now())
-                            ->required()
-                            ->columnSpan(3),
-                        Forms\Components\TextInput::make('notes')
-                            ->label('Notatka')
-                            ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
-                            ->maxLength(255)
-                            ->columnSpan(7),
+                            ->afterStateUpdated(fn(Set $set, Get $get) => $set('amount', IncomeItem::calculateTotal($get('price'), $get('quantity'))))
+                            ->step(0.01)
+                            ->minValue(0),
+                        Forms\Components\TextInput::make('amount')
+                            ->columnSpan(['default' => 1, 'lg' => 2])
+                            ->readOnly()
+                            ->dehydrated(false)
+                            ->label('Suma')
+                            ->numeric()
+                            ->suffix('zł')
+                            ->minValue(0),
                     ])
-                    ->columns(12),
+                    ->minItems(1)
+                    ->reorderableWithButtons()
+                    ->orderColumn('order_column')
+                    ->cloneable()
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
+                Forms\Components\TextInput::make('amount')
+                    ->label('Suma transakcji')
+                    ->readOnly()
+                    ->suffix('zł')
+                    ->live(onBlur: true)
+                    ->afterStateHydrated(function (Get $get, Set $set) {
+                        self::updateTotals($get, $set);
+                    })
+                    ->columnSpan(['default' => 1, 'lg' => 2]),
+                Forms\Components\DatePicker::make('date')
+                    ->label('Data transakcji')
+                    ->default(now())
+                    ->required()
+                    ->disabled(fn(Income $income) => $income->invoices()->exists())
+                    ->helperText(fn(Income $income): string => $income->invoices()->exists() ? 'Nie może być zmieniona, jeśli istnieje faktura pierwotna.' : '')
+                    ->columnSpan(['default' => 1, 'lg' => 3]),
+                Forms\Components\TextInput::make('notes')
+                    ->label('Notatka')
+                    ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
+                    ->maxLength(255)
+                    ->columnSpan(['default' => 1, 'lg' => 7]),
+                Forms\Components\Toggle::make('is_paid')
+                    ->label('Zapłacono całą kwotę')
+                    ->columnSpan(['default' => 1, 'lg' => 7]),
             ])
-            ->columns(1);
+            ->columns(12);
     }
 
     public static function table(Table $table): Table
@@ -172,7 +172,7 @@ class IncomeResource extends Resource
                     ->money('PLN')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
-                    ->label('Data sprzedaży')
+                    ->label('Data transakcji')
                     ->date()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('notes')

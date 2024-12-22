@@ -10,13 +10,8 @@ use Filament\Tables\Table;
 use Illuminate\Support\Str;
 use Illuminate\Support\HtmlString;
 use Barryvdh\Snappy\Facades\SnappyPdf;
-use DateTimeInterface;
-use Filament\Notifications\Notification;
 use Illuminate\Validation\ValidationException;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Actions\Action;
-use Filament\Tables\Actions\Modal\Actions\ButtonAction;
-use Nette\Utils\Html;
 
 class InvoicesRelationManager extends RelationManager
 {
@@ -79,17 +74,30 @@ class InvoicesRelationManager extends RelationManager
                                 Forms\Components\Placeholder::make('seller_data')
                                     ->label('')
                                     ->content(function () {
-                                        $user = auth()->user();
-                                        $contractorData = collect([
-                                            $user->seller_name ?? $user->name,
-                                            $user->seller_tax_id,
-                                            $user->seller_address,
-                                            trim($user->seller_postal_code . ' ' . $user->seller_city),
-                                            $user->seller_email,
-                                            $user->seller_phone,
-                                        ]);
+                                        $income = $this->getOwnerRecord();
+                                        if ($income->invoices()->exists()) {
+                                            $invoice = $income->invoices()->orderBy('created_at', 'desc')->first();
+                                            $sellerData = collect([
+                                                $invoice->seller_name,
+                                                $invoice->seller_tax_id,
+                                                $invoice->seller_address,
+                                                trim($invoice->seller_postal_code . ' ' . $invoice->seller_city),
+                                                $invoice->seller_email,
+                                                $invoice->seller_phone,
+                                            ]);
+                                        } else {
+                                            $user = auth()->user();
+                                            $sellerData = collect([
+                                                $user->seller_name ?? $user->name,
+                                                $user->seller_tax_id,
+                                                $user->seller_address,
+                                                trim($user->seller_postal_code . ' ' . $user->seller_city),
+                                                $user->seller_email,
+                                                $user->seller_phone,
+                                            ]);
+                                        }
 
-                                        return new HtmlString($contractorData->filter()->implode('<br>'));
+                                        return new HtmlString($sellerData->filter()->implode('<br>'));
                                     }),
                             ])
                             ->columns(1)
@@ -119,15 +127,13 @@ class InvoicesRelationManager extends RelationManager
                     ->required(),
                 Forms\Components\DatePicker::make('transaction_date')
                     ->label('Data transakcji')
-                    ->default(fn() => $this->getOwnerRecord()->date ?? now())
+                    ->disabled(fn() => $this->getOwnerRecord()->invoices()->exists())
+                    ->helperText(fn(): string => $this->getOwnerRecord()->invoices()->exists() ? 'Nie może być zmieniona, jeśli istnieje faktura pierwotna.' : '')
+                    ->default(fn() => $this->getOwnerRecord()->date)
                     ->required(),
                 Forms\Components\DatePicker::make('due_date')
                     ->label('Termin płatności')
                     ->default(fn() => $this->getOwnerRecord()->date->addWeek() ?? now()->addWeek())
-                    ->required(),
-                // Todo: Move is_paid from Invoice to Income (perserve $invoice->is_paid but add $income->is_paid and add it as default value)
-                Forms\Components\Toggle::make('is_paid')
-                    ->label('Opłacona')
                     ->required(),
             ]);
     }
@@ -137,7 +143,10 @@ class InvoicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('invoice_number')
             ->columns([
-                Tables\Columns\TextColumn::make('invoice_number'),
+                Tables\Columns\TextColumn::make('invoice_number')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('invoice_type')
                     ->label('Rodzaj')
                     ->badge()
@@ -147,6 +156,10 @@ class InvoicesRelationManager extends RelationManager
                     ->color(function (Invoice $invoice) {
                         return $invoice->invoice_id ? 'warning' : 'primary';
                     }),
+                Tables\Columns\TextColumn::make('amount')
+                    ->numeric()
+                    ->money('PLN')
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -182,6 +195,7 @@ class InvoicesRelationManager extends RelationManager
                             'issue_date' => $data['issue_date'],
                             'transaction_date' => $data['transaction_date'],
                             'due_date' => $data['due_date'],
+                            'title' => $income->title,
                             'notes' => $income->notes,
                             'amount' => $income->amount,
                             'tax_exemption_type' => $data['tax_exemption_type'],
@@ -222,7 +236,7 @@ class InvoicesRelationManager extends RelationManager
                     }),
             ])
             ->actions([
-                Action::make('preview')
+                Tables\Actions\Action::make('preview')
                     ->label('Podgląd')
                     ->icon('heroicon-o-eye')
                     ->modalHeading('Podgląd faktury')
@@ -250,8 +264,7 @@ class InvoicesRelationManager extends RelationManager
     {
         $currentMonth = now()->format('m');
         $currentYear = now()->format('Y');
-        $lastInvoice = Invoice::where('user_id', auth()->user()->id)
-            ->whereMonth('created_at', $currentMonth)
+        $lastInvoice = Invoice::whereMonth('created_at', $currentMonth)
             ->whereYear('created_at', $currentYear)
             ->orderBy('created_at', 'desc')
             ->first();

@@ -83,32 +83,37 @@ class InvoiceResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('invoice_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('income_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('invoice_type')
+                    ->label('Rodzaj')
+                    ->badge()
+                    ->state(function (Invoice $invoice) {
+                        return $invoice->invoice_id ? 'faktura korygująca' : 'faktura pierwotna';
+                    })
+                    ->color(function (Invoice $invoice) {
+                        return $invoice->invoice_id ? 'warning' : 'primary';
+                    }),
+
                 Tables\Columns\TextColumn::make('invoice_number')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('issue_date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('transaction_date')
                     ->date()
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('due_date')
                     ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('notes')
-                    ->searchable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
                     ->numeric()
+                    ->money('PLN')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('tax_exemption_type')
-                    ->searchable(),
-                Tables\Columns\IconColumn::make('is_paid')
-                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -117,50 +122,32 @@ class InvoiceResource extends Resource
                     ->dateTime()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('user_id')
-                    ->numeric()
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('contractor.name')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('contractor_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_tax_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_country')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_city')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_postal_code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_address')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('contractor_phone')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_name')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_tax_id')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_country')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_city')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_postal_code')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_address')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_email')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('seller_phone')
-                    ->searchable(),
+                    ->label('Kontrahent')
+                    ->url(fn(Invoice $invoice) => route('filament.app.resources.contractors.edit', $invoice->contractor_id)),
+                Tables\Columns\TextColumn::make('income.title')
+                    ->label('Przychód')
+                    ->url(fn(Invoice $invoice) => route('filament.app.resources.incomes.edit', $invoice->income_id)),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('preview')
+                    ->label('Podgląd')
+                    ->icon('heroicon-o-eye')
+                    ->modalHeading('Podgląd faktury')
+                    ->modalWidth('5xl')
+                    ->modalSubmitActionLabel('Pobierz')
+                    ->action(fn(Invoice $invoice) => $invoice->download())
+                    ->modalContent(function (Invoice $invoice) {
+                        return view('invoices.pdf', ['invoice' => $invoice]);
+                    }),
+                Tables\Actions\Action::make('download')
+                    ->label('Pobierz')
+                    ->icon('heroicon-c-document-arrow-down')
+                    ->action(fn(Invoice $invoice) => $invoice->download()),
+                // Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
