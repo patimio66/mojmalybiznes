@@ -100,6 +100,7 @@
                 $lastParentInvoiceNumber = $currentInvoice->invoice_number;
               @endphp
               <p>Dotyczy faktury pierwotnej nr: {{ $lastParentInvoiceNumber }}</p>
+              <p>Powód wystawienia faktury korygującej: {{ $invoice->correction_reason }}</p>
             @endif
             <p>Data wystawienia: {{ $invoice->issue_date->format('d.m.Y') }}</p>
             <p>Data transakcji: {{ $invoice->transaction_date->format('d.m.Y') }}</p>

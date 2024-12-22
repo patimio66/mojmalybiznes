@@ -3,9 +3,7 @@
 namespace App\Observers;
 
 use App\Models\Invoice;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
-use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class InvoiceObserver
 {
