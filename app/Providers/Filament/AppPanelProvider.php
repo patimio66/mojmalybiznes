@@ -7,9 +7,11 @@ use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
 use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
 use App\Http\Middleware\TransactionMiddleware;
+use App\Livewire\UserProfileEditSeller;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -21,6 +23,7 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -34,9 +37,21 @@ class AppPanelProvider extends PanelProvider
             ->registration()
             ->passwordReset()
             // ->emailVerification()
-            ->profile()
+            // ->profile()
+            ->plugin(
+                BreezyCore::make()
+                    ->myProfile()
+                    ->enableTwoFactorAuthentication()
+                    ->myProfileComponents([UserProfileEditSeller::class])
+            )
             ->colors([
                 'primary' => Color::Emerald,
+            ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('Zyski'),
+                NavigationGroup::make()
+                    ->label('Straty'),
             ])
             ->discoverResources(in: app_path('Filament/Resources'), for: 'App\\Filament\\Resources')
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\\Filament\\Pages')

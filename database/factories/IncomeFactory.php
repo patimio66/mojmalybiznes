@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Income;
+use App\Models\IncomeItem;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -9,18 +11,22 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class IncomeFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
+    protected $model = Income::class;
+
     public function definition(): array
     {
         return [
             'title' => fake()->text(30),
             'amount' => 0,
             'date' => now()->subDays(rand(1, 500))->format('Y-m-d'),
-            'description' => (bool)rand(0, 1) ? fake()->text(50) : '',
+            'notes' => (bool)rand(0, 1) ? fake()->text(50) : null,
         ];
+    }
+
+    public function configure()
+    {
+        return $this->afterCreating(function (Income $income) {
+            IncomeItem::factory()->count(rand(1, 10))->create(['income_id' => $income->id]);
+        });
     }
 }

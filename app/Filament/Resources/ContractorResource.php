@@ -53,7 +53,8 @@ class ContractorResource extends Resource
                     Forms\Components\TextInput::make('city')
                         ->label('Miasto')
                         ->maxLength(255),
-                ])->columns(3),
+                ])
+                    ->columns(3),
                 Forms\Components\Group::make([
                     Forms\Components\TextInput::make('email')
                         ->label('Email')
@@ -63,12 +64,14 @@ class ContractorResource extends Resource
                         ->label('Telefon')
                         ->tel()
                         ->maxLength(255),
-                ])->columns(2),
+                ])
+                    ->columns(2),
                 Forms\Components\Textarea::make('notes')
                     ->label('Notatka')
                     ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                     ->columnSpanFull(),
-            ])->columns(1);
+            ])
+            ->columns(1);
     }
 
     public static function table(Table $table): Table

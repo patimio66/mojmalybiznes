@@ -4,9 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\IncomeResource\Pages;
 use App\Filament\Resources\IncomeResource\RelationManagers;
+use App\Filament\Resources\IncomeResource\RelationManagers\InvoicesRelationManager;
+use App\Models\Contractor;
 use App\Models\Income;
 use App\Models\IncomeItem;
 use Filament\Forms;
+use Filament\Forms\Components\Actions\Action;
 use Filament\Forms\Form;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
@@ -16,6 +19,8 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Forms\Components\Tabs;
+
 
 class IncomeResource extends Resource
 {
@@ -23,6 +28,7 @@ class IncomeResource extends Resource
 
     protected static ?string $modelLabel = 'Przychód';
     protected static ?string $pluralModelLabel = 'Przychody';
+    protected static ?string $navigationGroup = 'Zyski';
 
     protected static ?string $navigationIcon = 'heroicon-o-arrow-trending-up';
 
@@ -32,17 +38,18 @@ class IncomeResource extends Resource
             ->schema([
                 Forms\Components\Select::make('contractor_id')
                     ->label('Kontrahent')
+                    ->required()
                     ->relationship(name: 'contractor', titleAttribute: 'name')
                     ->searchable()
                     ->createOptionForm(fn(Form $form) => ContractorResource::form($form))
                     ->editOptionForm(fn(Form $form) => ContractorResource::form($form))
-                    ->columnSpan('full'),
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
                 Forms\Components\TextInput::make('title')
                     ->label('Tytuł transakcji')
                     ->required()
                     ->helperText('np.: Zamówienie świec zapachowych')
                     ->maxLength(255)
-                    ->columnSpan('full'),
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
                 Forms\Components\Repeater::make('items')
                     ->relationship()
                     ->label('Pozycje')
@@ -54,13 +61,13 @@ class IncomeResource extends Resource
                     ->schema([
                         Forms\Components\TextInput::make('title')
                             ->label('Tytuł pozycji')
-                            ->columnSpan(['lg' => 4])
+                            ->columnSpan(['default' => 1, 'lg' => 4])
                             ->required()
                             ->helperText('np.: Świeca o zapachu lawendowym')
                             ->maxLength(255),
                         Forms\Components\TextInput::make('quantity')
                             ->label('Ilość')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(['default' => 1, 'lg' => 2])
                             ->required()
                             ->numeric()
                             ->inputMode('decimal')
@@ -70,7 +77,7 @@ class IncomeResource extends Resource
                             ->minValue(0.01),
                         Forms\Components\Select::make('uom')
                             ->label('Jednostka miary')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(['default' => 1, 'lg' => 2])
                             ->required()
                             ->searchable()
                             ->default('szt.')
@@ -101,7 +108,7 @@ class IncomeResource extends Resource
                             ]),
                         Forms\Components\TextInput::make('price')
                             ->label('Kwota')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(['default' => 1, 'lg' => 2])
                             ->required()
                             ->numeric()
                             ->suffix('zł')
@@ -111,7 +118,7 @@ class IncomeResource extends Resource
                             ->step(0.01)
                             ->minValue(0),
                         Forms\Components\TextInput::make('amount')
-                            ->columnSpan(['lg' => 2])
+                            ->columnSpan(['default' => 1, 'lg' => 2])
                             ->readOnly()
                             ->dehydrated(false)
                             ->label('Suma')
@@ -123,7 +130,7 @@ class IncomeResource extends Resource
                     ->reorderableWithButtons()
                     ->orderColumn('order_column')
                     ->cloneable()
-                    ->columnSpan('full'),
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
                 Forms\Components\TextInput::make('amount')
                     ->label('Suma transakcji')
                     ->readOnly()
@@ -132,17 +139,22 @@ class IncomeResource extends Resource
                     ->afterStateHydrated(function (Get $get, Set $set) {
                         self::updateTotals($get, $set);
                     })
-                    ->columnSpan(['lg' => 2]),
+                    ->columnSpan(['default' => 1, 'lg' => 2]),
                 Forms\Components\DatePicker::make('date')
-                    ->label('Data sprzedaży')
+                    ->label('Data transakcji')
                     ->default(now())
                     ->required()
-                    ->columnSpan(['lg' => 3]),
-                Forms\Components\TextInput::make('description')
+                    ->disabled(fn(Income $income) => $income->invoices()->exists())
+                    ->helperText(fn(Income $income): string => $income->invoices()->exists() ? 'Nie może być zmieniona, jeśli istnieje faktura pierwotna.' : '')
+                    ->columnSpan(['default' => 1, 'lg' => 3]),
+                Forms\Components\TextInput::make('notes')
                     ->label('Notatka')
                     ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                     ->maxLength(255)
-                    ->columnSpan(['lg' => 7]),
+                    ->columnSpan(['default' => 1, 'lg' => 7]),
+                Forms\Components\Toggle::make('is_paid')
+                    ->label('Zapłacono całą kwotę')
+                    ->columnSpan(['default' => 1, 'lg' => 7]),
             ])
             ->columns(12);
     }
@@ -160,10 +172,10 @@ class IncomeResource extends Resource
                     ->money('PLN')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('date')
-                    ->label('Data sprzedaży')
+                    ->label('Data transakcji')
                     ->date()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('description')
+                Tables\Columns\TextColumn::make('notes')
                     ->label('Notatka')
                     ->limit(50)
                     ->searchable(),
@@ -181,6 +193,7 @@ class IncomeResource extends Resource
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
+                Tables\Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
@@ -192,7 +205,7 @@ class IncomeResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            InvoicesRelationManager::class,
         ];
     }
 

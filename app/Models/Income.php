@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -19,11 +20,13 @@ class Income extends Model
     use HasFactory;
 
     protected $fillable = [
+        'contractor_id',
         'user_id',
         'title',
         'amount',
         'date',
-        'description',
+        'notes',
+        'is_paid',
     ];
 
     protected function casts(): array
@@ -31,6 +34,7 @@ class Income extends Model
         return [
             'amount' => 'decimal:2',
             'date' => 'date',
+            'is_paid' => 'boolean',
         ];
     }
 
@@ -39,9 +43,19 @@ class Income extends Model
         return $this->hasMany(IncomeItem::class);
     }
 
-    public function contractor()
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function contractor(): BelongsTo
     {
         return $this->belongsTo(Contractor::class);
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
     }
 
     public function updateTotal(): bool
@@ -52,12 +66,12 @@ class Income extends Model
 
     public static function calculateTotal(Collection $items): float
     {
-        return $items->reduce(function ($subtotal, $incomeItem) {
+        return round($items->reduce(function ($subtotal, $incomeItem) {
             if (is_array($incomeItem)) {
                 return $subtotal + round((((float)$incomeItem['price'] ?? 0) * ((float)$incomeItem['quantity'] ?? 0)), 2);
             } else {
-                return $subtotal + ((float)$incomeItem->amount ?? 0);
+                return $subtotal + round(((float)$incomeItem->amount ?? 0), 2);
             }
-        }, 0);
+        }, 0), 2);
     }
 }

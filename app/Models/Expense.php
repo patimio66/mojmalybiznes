@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Collection;
 
@@ -19,11 +20,12 @@ class Expense extends Model
     use HasFactory;
 
     protected $fillable = [
+        'contractor_id',
         'user_id',
         'title',
         'amount',
         'date',
-        'description',
+        'notes',
     ];
 
     protected function casts(): array
@@ -39,7 +41,7 @@ class Expense extends Model
         return $this->hasMany(ExpenseItem::class);
     }
 
-    public function contractor()
+    public function contractor(): BelongsTo
     {
         return $this->belongsTo(Contractor::class);
     }
