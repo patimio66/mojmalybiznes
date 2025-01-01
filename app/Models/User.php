@@ -10,11 +10,16 @@ use Filament\Models\Contracts\FilamentUser;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
+use App\Models\Invoice;
+use App\Models\Expense;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
+
+    protected $appends = ['storage_used', 'storage_used_for_humans'];
 
     /**
      * The attributes that are mass assignable.
@@ -70,5 +75,44 @@ class User extends Authenticatable implements FilamentUser
         }
 
         return true;
+    }
+
+    /**
+     * Get file sizes of all invoices and expenses.
+     *
+     * @return integer
+     */
+    public function getStorageUsedAttribute(): int
+    {
+        $invoiceFilesSize = Invoice::all()->flatMap(function ($invoice) {
+            return $invoice->getMedia();
+        })->sum(function (Media $media) {
+            return $media->size;
+        });
+
+        $expenseFilesSize = Expense::all()->flatMap(function ($expense) {
+            return $expense->getMedia();
+        })->sum(function (Media $media) {
+            return $media->size;
+        });
+
+        return $invoiceFilesSize + $expenseFilesSize + (1024 * 1024 * 1024);
+    }
+
+    /**
+     * Get file sizes of all invoices and expenses in human readable format.
+     *
+     * @return string
+     */
+    public function getStorageUsedForHumansAttribute(): string
+    {
+        $bytes = $this->storage_used;
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+
+        for ($i = 0; $bytes >= 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+
+        return round($bytes, 2) . ' ' . $units[$i];
     }
 }

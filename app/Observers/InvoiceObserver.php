@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Invoice;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+use Illuminate\Validation\ValidationException;
 
 class InvoiceObserver
 {
@@ -12,6 +14,13 @@ class InvoiceObserver
      */
     public function creating(Invoice $invoice): void
     {
+        if (Auth::user()->storage_used >= (1024 * 1024 * 1024)) {
+            Notification::make()
+                ->title('Przekroczono limit miejsca!')
+                ->danger()
+                ->send();
+            throw ValidationException::withMessages(['Przekroczono limit miejsca']);
+        }
         $invoice->user_id = Auth::user()->id;
     }
 

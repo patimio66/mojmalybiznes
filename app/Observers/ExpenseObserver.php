@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+use Illuminate\Validation\ValidationException;
 
 class ExpenseObserver
 {
@@ -12,6 +14,13 @@ class ExpenseObserver
      */
     public function creating(Expense $expense): void
     {
+        if (Auth::user()->storage_used >= (1024 * 1024 * 1024)) {
+            Notification::make()
+                ->title('Przekroczono limit miejsca!')
+                ->danger()
+                ->send();
+            throw ValidationException::withMessages(['Przekroczono limit miejsca']);
+        }
         $expense->user_id = Auth::user()->id;
     }
 

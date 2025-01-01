@@ -12,6 +12,7 @@ use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
 use App\Http\Middleware\TransactionMiddleware;
 use App\Livewire\UserProfileEditLimitCategory;
 use App\Livewire\UserProfileEditSeller;
+use App\Livewire\UserProfileShowStorageLimit;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
@@ -54,6 +55,7 @@ class AppPanelProvider extends PanelProvider
                     ->myProfileComponents([
                         UserProfileEditLimitCategory::class,
                         UserProfileEditSeller::class,
+                        UserProfileShowStorageLimit::class,
                     ])
             )
             ->colors([
