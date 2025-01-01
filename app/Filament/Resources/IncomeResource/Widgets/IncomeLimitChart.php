@@ -15,14 +15,13 @@ class IncomeLimitChart extends ChartWidget
 
     protected function getData(): array
     {
-        $thisMonth = Income::whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
-->sum('amount');
-        $monthlyLimit = 3225.00;
+        $thisMonthIncomeLimit = auth()->user()->getMonthlyIncomeLimit(now());
+        $thisMonthIncome = auth()->user()->getMonthlyIncome(now());
 
         return [
             'datasets' => [
                 [
-                    'data' => [$thisMonth, $monthlyLimit - $thisMonth],
+                    'data' => [$thisMonthIncome, $thisMonthIncomeLimit - $thisMonthIncome],
                     'backgroundColor' => [
                         'rgba(' . Color::Emerald[500] . ', 0.75)',
                         'rgba(' . Color::Gray[500] . ', 0.75)',

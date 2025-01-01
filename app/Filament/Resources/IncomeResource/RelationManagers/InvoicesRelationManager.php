@@ -233,7 +233,7 @@ class InvoicesRelationManager extends RelationManager
                             'income_id' => $income->id,
                             'contractor_id' => $contractor->id,
                             'issue_date' => $data['issue_date'],
-                            'transaction_date' => $data['transaction_date'],
+                            'transaction_date' => $data['transaction_date'] ?? $parentInvoice->transaction_date,
                             'due_date' => $data['due_date'],
                             'is_paid' => $income->is_paid,
                             'title' => $income->title,

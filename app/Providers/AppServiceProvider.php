@@ -2,10 +2,13 @@
 
 namespace App\Providers;
 
-use Filament\Forms\Components\FileUpload;
-use Filament\Tables\Columns\Column;
+use Filament\Pages\Page;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\Column;
 use Illuminate\Support\ServiceProvider;
+use Filament\Notifications\Notification;
+use Filament\Forms\Components\FileUpload;
+use Illuminate\Validation\ValidationException;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -35,5 +38,11 @@ class AppServiceProvider extends ServiceProvider
                 ->panelLayout(null)
                 ->visibility('private');
         });
+        Page::$reportValidationErrorUsing = function (ValidationException $exception) {
+            Notification::make()
+                ->title($exception->getMessage())
+                ->danger()
+                ->send();
+        };
     }
 }

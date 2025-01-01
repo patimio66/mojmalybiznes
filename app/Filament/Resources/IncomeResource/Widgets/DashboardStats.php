@@ -21,9 +21,9 @@ class DashboardStats extends BaseWidget
         $endDate = $this->filters && $this->filters['endDate'] ? Carbon::parse($this->filters['endDate']) : Carbon::now()->endOfYear();
 
         $incomes = Income::whereBetween('date', [$startDate, $endDate])
-->sum('amount');
+            ->sum('amount');
         $expenses = Expense::whereBetween('date', [$startDate, $endDate])
-->sum('amount');
+            ->sum('amount');
         $revenue = $incomes - $expenses;
         return [
             Stat::make('Przychód w okresie ' . $startDate->format('d.m.Y') . ' - ' . $endDate->format('d.m.Y') . ':', $incomes . ' zł')

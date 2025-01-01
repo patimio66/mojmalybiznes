@@ -146,10 +146,13 @@ class ExpenseResource extends Resource
                     ->columnSpan(['default' => 1, 'lg' => 7]),
                 Forms\Components\SpatieMediaLibraryFileUpload::make('document')
                     ->label('Załącznik')
-                    ->helperText('Dodaj dowód transakcji w formacie PDF. Może przydać się w przypadku kontroli.')
+                    ->helperText('Dodaj dowód transakcji w formacie PDF. Może przydać się w przypadku kontroli. Maksymalny rozmiar pliku to 2MB, a ich maksymalna liczba to 10. Jeśli plik się nie mieści, skompresuj go.')
                     ->openable()
                     ->multiple()
                     ->acceptedFileTypes(['application/pdf'])
+                    ->minSize(1)
+                    ->maxSize(2048)
+                    ->maxFiles(10)
                     ->columnSpan(['default' => 1, 'lg' => 'full']),
             ])
             ->columns(12);
@@ -184,6 +187,7 @@ class ExpenseResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('date', 'desc')
             ->filters([
                 //
             ])
