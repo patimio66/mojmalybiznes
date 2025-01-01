@@ -2,16 +2,22 @@
 
 namespace App\Providers\Filament;
 
+use App\Filament\Admin\Resources\UserResource;
+use App\Filament\Resources\ExpenseResource;
 use App\Filament\Resources\ExpenseResource\Widgets\ExpenseYearlyChart;
+use App\Filament\Resources\IncomeResource;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
 use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
 use App\Http\Middleware\TransactionMiddleware;
+use App\Livewire\UserProfileEditLimitCategory;
 use App\Livewire\UserProfileEditSeller;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationBuilder;
 use Filament\Navigation\NavigationGroup;
+use Filament\Navigation\NavigationItem;
 use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -40,12 +46,25 @@ class AppPanelProvider extends PanelProvider
             // ->profile()
             ->plugin(
                 BreezyCore::make()
-                    ->myProfile()
+                    ->myProfile(
+                        shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
+                        shouldRegisterNavigation: false, // Adds a main navigation item for the My Profile page (default = false)
+                    )
                     ->enableTwoFactorAuthentication()
-                    ->myProfileComponents([UserProfileEditSeller::class])
+                    ->myProfileComponents([
+                        UserProfileEditLimitCategory::class,
+                        UserProfileEditSeller::class,
+                    ])
             )
             ->colors([
                 'primary' => Color::Emerald,
+            ])
+            ->navigationItems([
+                NavigationItem::make('settings')
+                    ->label('Ustawienia konta')
+                    ->url(fn(): string => route('filament.app.pages.my-profile'))
+                    ->isActiveWhen(fn() => request()->routeIs('filament.app.pages.my-profile'))
+                    ->icon('heroicon-o-cog-6-tooth'),
             ])
             ->navigationGroups([
                 NavigationGroup::make()

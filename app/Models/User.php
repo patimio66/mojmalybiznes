@@ -33,6 +33,7 @@ class User extends Authenticatable implements FilamentUser
         'seller_address',
         'seller_email',
         'seller_phone',
+        'limit_category',
     ];
 
     /**
