@@ -2,12 +2,12 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\UserAccessScope;
 use App\Observers\ContractorObserver;
-use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use App\Models\Scopes\UserAccessScope;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 
 #[ObservedBy(ContractorObserver::class)]
 #[ScopedBy(UserAccessScope::class)]

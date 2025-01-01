@@ -13,6 +13,8 @@ class DashboardStats extends BaseWidget
 {
     use InteractsWithPageFilters;
 
+    protected int | string | array $columnSpan = ['default' => 12, 'lg' => 12];
+
     protected function getStats(): array
     {
         $startDate = $this->filters && $this->filters['startDate'] ? Carbon::parse($this->filters['startDate']) : Carbon::now()->startOfYear();

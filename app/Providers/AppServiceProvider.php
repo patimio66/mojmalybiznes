@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Columns\Column;
 use Filament\Tables\Table;
 use Illuminate\Support\ServiceProvider;
@@ -28,6 +29,11 @@ class AppServiceProvider extends ServiceProvider
         Column::configureUsing(function (Column $column): void {
             $column
                 ->toggleable();
+        });
+        FileUpload::configureUsing(function (FileUpload $column): void {
+            $column
+                ->panelLayout(null)
+                ->visibility('private');
         });
     }
 }

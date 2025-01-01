@@ -51,7 +51,7 @@ class InvoicesRelationManager extends RelationManager
                             ->label('Powód wystawienia faktury korygującej')
                             ->hidden(fn() => !$this->getOwnerRecord()->invoices()->exists())
                             ->required(fn() => $this->getOwnerRecord()->invoices()->exists())
-                            ->columnSpan(2),
+                            ->columnSpan('full'),
                         Forms\Components\Fieldset::make('contractor_details')
                             ->label('Dane kupującego')
                             ->schema([
@@ -107,12 +107,16 @@ class InvoicesRelationManager extends RelationManager
                             ])
                             ->columns(1)
                             ->columnSpan(1),
+                        Forms\Components\Placeholder::make('edit_customer_information')
+                            ->label('Kupującego można edytować na stronie przychodu.')
+                            ->columns(1)
+                            ->columnSpan(1),
+                        Forms\Components\Placeholder::make('edit_seller_information')
+                            ->label('Sprzedawcę można edytować w ustawieniach profilu.')
+                            ->columns(1)
+                            ->columnSpan(1),
                     ])
                     ->columns(2),
-                Forms\Components\Placeholder::make('edit_customer_information')
-                    ->label('Kupującego można edytować na stronie przychodu.'),
-                Forms\Components\Placeholder::make('edit_seller_information')
-                    ->label('Sprzedawcę można edytować w ustawieniach profilu.'),
                 Forms\Components\Radio::make('tax_exemption_type')
                     ->label('Zwolnienie podatkowe')
                     ->default('objective')
@@ -121,24 +125,28 @@ class InvoicesRelationManager extends RelationManager
                         'subjective' => 'Przedmiotowe - rodzaj prowadzonej działalności (art. 43 ust 1 ustawy o VAT).',
                     ])
                     ->required()
-                    ->columnSpan(2),
+                    ->columnSpan('full'),
                 Forms\Components\TextInput::make('invoice_number')
                     ->label('Numer faktury')
-                    ->default(fn() => $this->generateInvoiceNumber()),
+                    ->default(fn() => $this->generateInvoiceNumber())
+                    ->columnSpan(1),
                 Forms\Components\DatePicker::make('issue_date')
                     ->label('Data wystawienia')
                     ->default(now())
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
                 Forms\Components\DatePicker::make('transaction_date')
                     ->label('Data transakcji')
                     ->disabled(fn() => $this->getOwnerRecord()->invoices()->exists())
                     ->helperText(fn(): string => $this->getOwnerRecord()->invoices()->exists() ? 'Nie może być zmieniona, jeśli istnieje faktura pierwotna.' : '')
                     ->default(fn() => $this->getOwnerRecord()->date)
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
                 Forms\Components\DatePicker::make('due_date')
                     ->label('Termin płatności')
                     ->default(fn() => $this->getOwnerRecord()->date->addWeek() ?? now()->addWeek())
-                    ->required(),
+                    ->required()
+                    ->columnSpan(1),
             ]);
     }
 
@@ -147,10 +155,6 @@ class InvoicesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('invoice_number')
             ->columns([
-                Tables\Columns\TextColumn::make('invoice_number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
                 Tables\Columns\TextColumn::make('invoice_type')
                     ->label('Rodzaj')
                     ->badge()
@@ -160,10 +164,42 @@ class InvoicesRelationManager extends RelationManager
                     ->color(function (Invoice $invoice) {
                         return $invoice->invoice_id ? 'warning' : 'primary';
                     }),
+                Tables\Columns\TextColumn::make('invoice_number')
+                    ->label('Numer faktury')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('title')
+                    ->label('Tytuł')
+                    ->searchable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('issue_date')
+                    ->label('Data wystawienia')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('transaction_date')
+                    ->label('Data transakcji')
+                    ->date()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('due_date')
+                    ->label('Termin płatności')
+                    ->date()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('Wartość')
                     ->numeric()
                     ->money('PLN')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Utworzono')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Zaktualizowano')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

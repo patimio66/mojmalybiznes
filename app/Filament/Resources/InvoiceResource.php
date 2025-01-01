@@ -94,40 +94,48 @@ class InvoiceResource extends Resource
                     }),
 
                 Tables\Columns\TextColumn::make('invoice_number')
+                    ->label('Numer faktury')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('title')
+                    ->label('Tytuł')
                     ->searchable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('issue_date')
+                    ->label('Data wystawienia')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('transaction_date')
+                    ->label('Data transakcji')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('due_date')
+                    ->label('Termin płatności')
                     ->date()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('amount')
+                    ->label('Wartość')
                     ->numeric()
                     ->money('PLN')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('contractor.name')
                     ->label('Kontrahent')
                     ->url(fn(Invoice $invoice) => route('filament.app.resources.contractors.edit', $invoice->contractor_id)),
                 Tables\Columns\TextColumn::make('income.title')
                     ->label('Przychód')
                     ->url(fn(Invoice $invoice) => route('filament.app.resources.incomes.edit', $invoice->income_id)),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Utworzono')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('updated_at')
+                    ->label('Zaktualizowano')
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //

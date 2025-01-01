@@ -10,7 +10,7 @@ class IncomeLimitChart extends ChartWidget
 {
     protected static ?string $heading = 'Limit przychodów w tym miesiącu';
 
-    protected int | string | array $columnSpan = 12;
+    protected int | string | array $columnSpan = ['default' => 12, 'lg' => 6];
     protected static ?string $maxHeight = '275px';
 
     protected function getData(): array

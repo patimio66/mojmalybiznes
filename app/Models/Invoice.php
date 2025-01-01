@@ -3,19 +3,19 @@
 namespace App\Models;
 
 use Illuminate\Support\Str;
+use Spatie\MediaLibrary\HasMedia;
 use App\Observers\InvoiceObserver;
 use Illuminate\Support\Collection;
 use App\Models\Scopes\UserAccessScope;
 use Barryvdh\Snappy\Facades\SnappyPdf;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Attributes\ScopedBy;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
-use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\HasMedia;
 
 #[ObservedBy(InvoiceObserver::class)]
 #[ScopedBy(UserAccessScope::class)]

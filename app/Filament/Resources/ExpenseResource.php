@@ -144,6 +144,13 @@ class ExpenseResource extends Resource
                     ->helperText('Notatka jest prywatna i nie pojawi się w raportach.')
                     ->maxLength(255)
                     ->columnSpan(['default' => 1, 'lg' => 7]),
+                Forms\Components\SpatieMediaLibraryFileUpload::make('document')
+                    ->label('Załącznik')
+                    ->helperText('Dodaj dowód transakcji w formacie PDF. Może przydać się w przypadku kontroli.')
+                    ->openable()
+                    ->multiple()
+                    ->acceptedFileTypes(['application/pdf'])
+                    ->columnSpan(['default' => 1, 'lg' => 'full']),
             ])
             ->columns(12);
     }
