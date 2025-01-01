@@ -137,6 +137,7 @@ class InvoiceResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('issue_date', 'desc')
             ->filters([
                 //
             ])

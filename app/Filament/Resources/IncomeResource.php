@@ -187,6 +187,7 @@ class IncomeResource extends Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('date', 'desc')
             ->filters([
                 //
             ])
