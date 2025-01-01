@@ -4,6 +4,8 @@ namespace App\Observers;
 
 use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
+use Filament\Notifications\Notification;
+use Illuminate\Validation\ValidationException;
 
 class IncomeObserver
 {
@@ -12,6 +14,14 @@ class IncomeObserver
      */
     public function creating(Income $income): void
     {
+        if (auth()->user()->getMonthlyIncome($income->date) > auth()->user()->getMonthlyIncomeLimit($income->date)) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Przekroczono limit przychodu. Zmiana kategorii limitu spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->send();
+            throw ValidationException::withMessages(['Przekroczono limit przychodu']);
+        }
         $income->user_id = Auth::user()->id;
     }
 
@@ -28,7 +38,14 @@ class IncomeObserver
      */
     public function updating(Income $income): void
     {
-        //
+        if (auth()->user()->getMonthlyIncome($income->date) > auth()->user()->getMonthlyIncomeLimit($income->date)) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Przekroczono limit przychodu. Zmiana kategorii limitu spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->send();
+            throw ValidationException::withMessages(['Przekroczono limit przychodu']);
+        }
     }
 
     /**

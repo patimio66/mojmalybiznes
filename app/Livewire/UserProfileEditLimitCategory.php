@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
 use Filament\Facades\Filament;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Filament\Forms;
 use Filament\Notifications\Notification;
 use Jeffgreco13\FilamentBreezy\Livewire\MyProfileComponent;
+use Illuminate\Support\Carbon;
 
 class UserProfileEditLimitCategory extends MyProfileComponent
 {
@@ -45,14 +47,32 @@ class UserProfileEditLimitCategory extends MyProfileComponent
             ->statePath('data');
     }
 
-    // only capture the custome component field
+    // only capture the custom component field
     public function submit(): void
     {
         $data = collect($this->form->getState())->only($this->only)->all();
+
+        if ($this->exceedsLimit($data['limit_category'])) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Przekroczono limit przychodu. Zmiana kategorii limitu spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->send();
+            return;
+        }
+
         $this->user->update($data);
         Notification::make()
             ->success()
             ->title('Zapisano.')
             ->send();
+    }
+
+    protected function exceedsLimit($newCategory): bool
+    {
+        $currentIncome = $this->user->getMonthlyIncome(now());
+        $limit = User::monthlyIncomeLimit(now(), $newCategory);
+
+        return $currentIncome > $limit;
     }
 }

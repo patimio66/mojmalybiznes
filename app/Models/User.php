@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use App\Models\Invoice;
 use App\Models\Expense;
+use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class User extends Authenticatable implements FilamentUser
@@ -114,5 +115,54 @@ class User extends Authenticatable implements FilamentUser
         }
 
         return round($bytes, 2) . ' ' . $units[$i];
+    }
+
+    /**
+     * Get income for the given month.
+     *
+     * @param Carbon $date
+     * @return float
+     */
+    public function getMonthlyIncome(Carbon $date): float
+    {
+        return Income::whereBetween('date', [$date->startOfMonth()->format('Y-m-d'), $date->endOfMonth()->format('Y-m-d')])
+            ->sum('amount');
+    }
+
+    /**
+     * Get monthly income limit for the given date.
+     *
+     * @param Carbon $date
+     * @return float
+     * @throws \Exception
+     */
+    public function getMonthlyIncomeLimit(Carbon $date): float
+    {
+        $monthlyLimit = MonthlyIncomeLimit::where('starts_at', '>=', $date->startOfMonth()->format('Y-m-d'))->where(function ($query) use ($date) {
+            $query->where('ends_at', '<=', $date->endOfMonth()->format('Y-m-d'))->orWhereNull('ends_at');
+        })
+            ->first()
+            ?->{$this->limit_category ?? 'default'} ?? throw new \Exception('Monthly income limit not found');
+
+        return $monthlyLimit;
+    }
+
+    /**
+     * Get monthly income limit for the given date and limit_category.
+     *
+     * @param Carbon $date
+     * @param string $limit_category
+     * @return float
+     * @throws \Exception
+     */
+    public static function monthlyIncomeLimit(Carbon $date, $limit_category = 'default'): float
+    {
+        $monthlyLimit = MonthlyIncomeLimit::where('starts_at', '>=', $date->startOfMonth()->format('Y-m-d'))->where(function ($query) use ($date) {
+            $query->where('ends_at', '<=', $date->endOfMonth()->format('Y-m-d'))->orWhereNull('ends_at');
+        })
+            ->first()
+            ?->{$limit_category ?? 'default'} ?? throw new \Exception('Monthly income limit not found');
+
+        return $monthlyLimit;
     }
 }

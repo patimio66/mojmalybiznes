@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\IncomeResource\Widgets;
 
 use App\Models\Income;
-use App\Models\MonthlyIncomeLimit;
 use Filament\Support\Colors\Color;
 use Filament\Widgets\ChartWidget;
 
@@ -16,18 +15,13 @@ class IncomeLimitChart extends ChartWidget
 
     protected function getData(): array
     {
-        $thisMonth = Income::whereBetween('date', [now()->startOfMonth(), now()->endOfMonth()])
-            ->sum('amount');
-        $monthlyLimit = MonthlyIncomeLimit::where('starts_at', '>=', now()->startOfMonth())->where(function ($query) {
-            $query->where('ends_at', '<=', now()->endOfMonth())->orWhereNull('ends_at');
-        })
-            ->first()
-            ?->{auth()->user()?->limit_category ?? 'default'} ?? throw new \Exception('Brak limitu przychodów dla tego miesiąca');
+        $thisMonthIncomeLimit = auth()->user()->getMonthlyIncomeLimit(now());
+        $thisMonthIncome = auth()->user()->getMonthlyIncome(now());
 
         return [
             'datasets' => [
                 [
-                    'data' => [$thisMonth, $monthlyLimit - $thisMonth],
+                    'data' => [$thisMonthIncome, $thisMonthIncomeLimit - $thisMonthIncome],
                     'backgroundColor' => [
                         'rgba(' . Color::Emerald[500] . ', 0.75)',
                         'rgba(' . Color::Gray[500] . ', 0.75)',
