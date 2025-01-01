@@ -16,7 +16,7 @@ class IncomeYearlyChart extends ChartWidget
 
     protected static ?string $heading = 'Przychody';
 
-    protected int | string | array $columnSpan = 6;
+    protected int | string | array $columnSpan = ['default' => 12, 'lg' => 6];
 
     protected function getData(): array
     {

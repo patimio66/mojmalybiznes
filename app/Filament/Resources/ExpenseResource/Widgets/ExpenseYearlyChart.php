@@ -15,7 +15,7 @@ class ExpenseYearlyChart extends ChartWidget
 
     protected static ?string $heading = 'Wydatki';
 
-    protected int | string | array $columnSpan = 6;
+    protected int | string | array $columnSpan = ['default' => 12, 'lg' => 6];
 
     protected function getData(): array
     {
