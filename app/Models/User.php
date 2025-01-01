@@ -60,10 +60,14 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        if (app()->environment('local')) {
+            return true;
+        }
 
         if ($panel->getId() === 'admin') {
             return str_ends_with($this->email, '@quiksite.pl') && $this->hasVerifiedEmail();
         }
+
+        return true;
     }
 }
