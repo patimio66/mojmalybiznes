@@ -18,7 +18,7 @@ class IncomeObserver
             Notification::make()
                 ->danger()
                 ->title('Zablokowano operację.')
-                ->body('Przekroczono limit przychodu. Zmiana kategorii limitu spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->body('Operacja spowodowałaby przekroczenie miesięcznego limitu przychodu.')
                 ->send();
             throw ValidationException::withMessages(['Przekroczono limit przychodu']);
         }
@@ -42,7 +42,7 @@ class IncomeObserver
             Notification::make()
                 ->danger()
                 ->title('Zablokowano operację.')
-                ->body('Przekroczono limit przychodu. Zmiana kategorii limitu spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->body('Operacja spowodowałaby przekroczenie miesięcznego limitu przychodu.')
                 ->send();
             throw ValidationException::withMessages(['Przekroczono limit przychodu']);
         }
