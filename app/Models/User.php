@@ -96,7 +96,7 @@ class User extends Authenticatable implements FilamentUser
             return $media->size;
         });
 
-        return $invoiceFilesSize + $expenseFilesSize + (1024 * 1024 * 1024);
+        return $invoiceFilesSize + $expenseFilesSize;
     }
 
     /**
