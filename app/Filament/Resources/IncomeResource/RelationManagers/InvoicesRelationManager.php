@@ -128,6 +128,7 @@ class InvoicesRelationManager extends RelationManager
                     ->columnSpan('full'),
                 Forms\Components\TextInput::make('invoice_number')
                     ->label('Numer faktury')
+                    ->helperText('Program potrafi automatycznie przydzielać kolejne numery faktur, jeśli zapisane są w formacie "ROK/NUMER".')
                     ->default(fn() => $this->generateInvoiceNumber())
                     ->columnSpan(1),
                 Forms\Components\DatePicker::make('issue_date')
@@ -303,18 +304,20 @@ class InvoicesRelationManager extends RelationManager
             ]);
     }
 
-    protected function generateInvoiceNumber(): string
+    protected function generateInvoiceNumber(): ?string
     {
-        $currentMonth = now()->format('m');
         $currentYear = now()->format('Y');
-        $lastInvoice = Invoice::whereMonth('created_at', $currentMonth)
-            ->whereYear('created_at', $currentYear)
+        $lastInvoice = Invoice::whereYear('created_at', $currentYear)
             ->orderBy('created_at', 'desc')
             ->first();
 
-        $lastNumber = $lastInvoice ? intval(explode('/', $lastInvoice->invoice_number)[0]) : 0;
+        if ($lastInvoice && !preg_match('/^\d{4}\/\d+$/', $lastInvoice->invoice_number)) {
+            return null;
+        }
+
+        $lastNumber = $lastInvoice ? intval(explode('/', $lastInvoice->invoice_number)[1]) : 0;
         $newNumber = $lastNumber + 1;
 
-        return sprintf('%d/%s/%s', $newNumber, $currentMonth, $currentYear);
+        return sprintf('%s/%03d', $currentYear, $newNumber);
     }
 }
