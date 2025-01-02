@@ -21,3 +21,6 @@ Zasób umożliwia zarządzanie kontrahentami w systemie.
 Kontrahentów można wykorzystywać zarówno podczas wprowadzania przychodu, jak i wydatku. Jak sama nazwa wskazuje, jest osoba lub podmiot, z którym zawieramy umowę handlową lub inną transakcję. Kontrahenci mogą być klientami, dostawcami, partnerami biznesowymi i tak dalej.
 
 > ⚠️ **Uwaga:** Usunięcie kontrahenta powoduje również automatyczne usunięcie wszystkich przypisanych do niego zasobów, takich jak przychody, wydatki, czy faktury. Operacja ta jest nieodwracalna!
+
+# Relacje między modelami
+Kontrahenci są powiązani z fakturami, przychodami oraz wydatkami. Każdy kontrahent może być przypisany do wielu faktur, przychodów oraz wydatków. Relacje te umożliwiają śledzenie transakcji każdego z kontrahentów oraz spójność danych.

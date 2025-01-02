@@ -26,3 +26,6 @@ Zasób umożliwia zarządzanie fakturami w systemie.
 Faktury pozwalają na rejestrowanie i śledzenie wszystkich transakcji fakturowych w systemie. Można je powiązać z kontrahentami oraz przychodami, co ułatwia zarządzanie finansami firmy.
 
 > ⚠️ **Uwaga:** Usunięcie faktury powoduje również automatyczne usunięcie wszystkich przypisanych do niej pozycji oraz powiązanych przychodów. Operacja ta jest nieodwracalna!
+
+# Relacje między modelami
+Faktury są powiązane z kontrahentami oraz przychodami. Każda faktura musi mieć przypisanego kontrahenta, który jest odbiorcą faktury. Faktury mogą być również powiązane z przychodami, co umożliwia śledzenie płatności i zarządzanie finansami firmy.
