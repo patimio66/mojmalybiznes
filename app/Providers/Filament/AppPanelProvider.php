@@ -23,6 +23,7 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Guava\FilamentKnowledgeBase\KnowledgeBasePlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -45,7 +46,7 @@ class AppPanelProvider extends PanelProvider
             ->passwordReset()
             // ->emailVerification()
             // ->profile()
-            ->plugin(
+            ->plugins([
                 BreezyCore::make()
                     ->myProfile(
                         shouldRegisterUserMenu: true, // Sets the 'account' link in the panel User Menu (default = true)
@@ -56,8 +57,9 @@ class AppPanelProvider extends PanelProvider
                         UserProfileEditLimitCategory::class,
                         UserProfileEditSeller::class,
                         UserProfileShowStorageLimit::class,
-                    ])
-            )
+                    ]),
+                KnowledgeBasePlugin::make(),
+            ])
             ->colors([
                 'primary' => Color::Emerald,
             ])
