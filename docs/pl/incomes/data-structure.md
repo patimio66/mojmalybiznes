@@ -27,4 +27,4 @@ Przychody pozwalają na rejestrowanie i śledzenie wszystkich transakcji przycho
 > ⚠️ **Uwaga:** Usunięcie przychodu powoduje również automatyczne usunięcie wszystkich przypisanych do niego pozycji oraz powiązanych faktur. Operacja ta jest nieodwracalna!
 
 # Relacje między modelami
-Przychody są powiązane z kontrahentami oraz fakturami. Każdy przychód musi mieć przypisanego kontrahenta, który jest źródłem przychodu. Przychody mogą być również powiązane z fakturami, co umożliwia śledzenie płatności i zarządzanie finansami firmy.
+Przychody są powiązane z kontrahentami oraz fakturami. Każdy przychód musi mieć przypisanego kontrahenta, który jest źródłem przychodu. Przychody mogą być również powiązane z fakturami.

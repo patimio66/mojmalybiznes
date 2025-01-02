@@ -1,6 +1,6 @@
 ---
-group: Struktura danych
-title: Faktury
+group: Fakturowanie
+title: Korekty faktur
 icon: heroicon-o-document-text
 ---
 

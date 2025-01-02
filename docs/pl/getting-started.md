@@ -9,16 +9,44 @@ Mój Mały Biznes to proste narzędzie stworzone z myślą o nierejestrowanych p
 
 Jej głównym celem jest pomoc w prowadzeniu jednolitej ewidencji sprzedaży, rejestrowania zakupów (w celu wyliczenia dochodu) oraz generowania faktur sprzedaży, czyli wszystko to, co potrzebne jest w prowadzeniu działalności nierejestrowanej.
 
+### Co robi aplikacja
+
+-   ✅ Pilnuje miesięcznego limitu przychodów
+-   ✅ Pozwala wygenerować faktury
+-   ✅ Zawiera podsumowania i narzędzia do raportowania
+
+<br>
+
+### Czego nie robi aplikacja
+
+-   ❌ Sprawdza poprawność faktur, usług czy produktów pod względem treści
+-   ❌ Sprawdza legalność prowadzonej działalności
+-   ❌ Nie pilnuje limitu zwolnienia z posiadania kasy fiskalnej (jeszcze)
+
+\
+Ostatecznie to na użytkowniku spoczywa odpowiedzialność prawidłowego rozliczenia się z Urzędem Skarbowym. Dajemy narzędzie, które ma to ułatwić.
+
+# Dla kogo ten rodzaj działalności
+
 Możesz prowadzić działalność nierejestrowaną, jeżeli:
 
 -   w okresie ostatnich 60 miesięcy (5 lat) nie wykonywałeś działalności gospodarczej.
--   miesięczne przychody z twojej działalności nie przekroczą limitu, czyli obecnie 75% kwoty minimalnego wynagrodzenia obowiązującego w danym roku.
+-   miesięczne przychody z twojej działalności nie przekroczą limitu, czyli obecnie 75% kwoty minimalnego wynagrodzenia.
 
+\
 Musisz zarejestrować firmę, nawet jeśli planujesz niewielkie przychody, ale działalność, którą chcesz prowadzić:
 
-wymaga zezwolenia, koncesji albo wpisu do rejestru działalności regulowanej
-została zdefiniowana w przepisach jako działalność gospodarcza w rozumieniu ustawy Prawo przedsiębiorców.
+-   wymaga zezwolenia, koncesji albo wpisu do rejestru działalności regulowanej
+-   została zdefiniowana w przepisach jako działalność gospodarcza w rozumieniu ustawy Prawo przedsiębiorców.
+
+\
 W tych przypadkach działalność nie może być wykonywana bez rejestracji.
+
+Jeśli jesteś zarejestrowaną osobą bezrobotną, obowiązuje Cię niższy limit przychodów. Jest to obecnie 50% kwoty minimalnego wynagrodzenia. Aplikacja pozwala na wybranie tej opcji w ustawieniach profilu - po zmianie ustawień, limit zostanie ustawiony na odpowiedni.
+
+> ⚠️ **Uwaga:** Osoby bezrobotne mogą tylko sprzedawać produkty. Nie mogą świadczyć usług z tytułu działalności nierejestrowanej.
+
+Mogą istnieć dodatkowe ograniczenia dla specyficznych grup, dlatego warto zapoznać się z informacjami dostępnymi w oficjalnych źródłach.
 
 # Limit przychodów
 
