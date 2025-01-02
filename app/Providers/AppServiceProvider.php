@@ -8,6 +8,7 @@ use Filament\Tables\Columns\Column;
 use Illuminate\Support\ServiceProvider;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\FileUpload;
+use Guava\FilamentKnowledgeBase\Filament\Panels\KnowledgeBasePanel;
 use Illuminate\Validation\ValidationException;
 
 class AppServiceProvider extends ServiceProvider
@@ -17,7 +18,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        KnowledgeBasePanel::configureUsing(
+            fn(KnowledgeBasePanel $panel) => $panel
+                ->viteTheme('resources/css/filament/app/theme.css')
+        );
     }
 
     /**
