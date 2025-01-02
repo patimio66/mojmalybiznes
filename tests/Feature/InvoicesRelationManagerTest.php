@@ -59,9 +59,9 @@ it('can create an invoice for income using relation manager', function () {
         ->orderBy('created_at', 'desc')
         ->first();
 
-    $lastNumber = $lastInvoice ? intval(explode('/', $lastInvoice->invoice_number)[0]) : 0;
+    $lastNumber = $lastInvoice ? intval(explode('/', $lastInvoice->invoice_number)[1]) : 0;
 
-    $invoiceNumber = sprintf('%d/%s/%s', $lastNumber, $currentMonth, $currentYear);
+    $invoiceNumber = sprintf('%s/%03d', $currentYear, $lastNumber);
 
     assertDatabaseHas(Invoice::class, [
         'invoice_number' => $invoiceNumber,
