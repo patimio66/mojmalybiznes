@@ -79,6 +79,15 @@ class User extends Authenticatable implements FilamentUser
         return true;
     }
 
+    public function canImpersonate()
+    {
+        if (app()->environment('local')) {
+            return true;
+        }
+
+        return str_ends_with($this->email, '@quiksite.pl') && $this->hasVerifiedEmail();
+    }
+
     /**
      * Get file sizes of all invoices and expenses.
      *
