@@ -5,6 +5,7 @@ namespace App\Observers;
 use App\Models\Income;
 use Illuminate\Support\Facades\Auth;
 use Filament\Notifications\Notification;
+use Illuminate\Support\Carbon;
 use Illuminate\Validation\ValidationException;
 
 class IncomeObserver
@@ -30,6 +31,14 @@ class IncomeObserver
                 ->send();
             throw ValidationException::withMessages(['Przekroczono limit przychodu']);
         }
+        if ($income->date->isBefore(Carbon::parse('2020-01-01'))) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Działalność jednoosobową można prowadzić od marca 2018 roku, natomiast w aplikacji nie można dodać przychodów przed rokiem 2020.')
+                ->send();
+            throw ValidationException::withMessages(['Najstarszy rok, jaki można dodać w aplikacji to 2020.']);
+        }
     }
 
     /**
@@ -52,6 +61,14 @@ class IncomeObserver
                 ->body('Operacja spowodowałaby przekroczenie miesięcznego limitu przychodu.')
                 ->send();
             throw ValidationException::withMessages(['Przekroczono limit przychodu']);
+        }
+        if ($income->date->isBefore(Carbon::parse('2020-01-01'))) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Działalność jednoosobową można prowadzić od marca 2018 roku, natomiast w aplikacji nie można dodać przychodów przed rokiem 2020.')
+                ->send();
+            throw ValidationException::withMessages(['Najstarszy rok, jaki można dodać w aplikacji to 2020.']);
         }
     }
 

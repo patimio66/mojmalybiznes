@@ -2,16 +2,18 @@
 
 namespace App\Filament\Admin\Resources;
 
-use App\Filament\Admin\Resources\UserResource\Pages;
-use App\Filament\Admin\Resources\UserResource\RelationManagers;
-use App\Models\User;
 use Filament\Forms;
-use Filament\Forms\Form;
-use Filament\Resources\Resource;
+use App\Models\User;
 use Filament\Tables;
+use Filament\Forms\Form;
 use Filament\Tables\Table;
+use Filament\Resources\Resource;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Admin\Resources\UserResource\Pages;
+use STS\FilamentImpersonate\Tables\Actions\Impersonate;
+use App\Filament\Admin\Resources\UserResource\RelationManagers;
+use App\Filament\Pages\Dashboard;
 
 class UserResource extends Resource
 {
@@ -82,6 +84,8 @@ class UserResource extends Resource
                 //
             ])
             ->actions([
+                Impersonate::make()
+                    ->redirectTo(Dashboard::getUrl()),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
