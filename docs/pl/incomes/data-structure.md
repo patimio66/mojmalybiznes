@@ -17,7 +17,7 @@ Zasób umożliwia zarządzanie przychodami w systemie.
   - **Kwota**: Cena jednostkowa pozycji. Pole wymagane.
   - **Suma**: Łączna kwota za pozycję (ilość * kwota). Pole automatycznie wyliczane.
 - **Suma transakcji**: Łączna kwota za wszystkie pozycje. Pole automatycznie wyliczane.
-- **Data transakcji**: Data, kiedy transakcja miała miejsce. Pole wymagane.
+- **Data transakcji**: Data, kiedy transakcja miała miejsce. Pole wymagane. Działalność jednoosobową można prowadzić od marca 2018 roku, natomiast w aplikacji nie można dodać przychodów przed rokiem 2020.
 - **Notatka**: Prywatna notatka dotycząca transakcji, która nie pojawi się w raportach.
 - **Zapłacono całą kwotę**: Przełącznik wskazujący, czy cała kwota została zapłacona.
 
