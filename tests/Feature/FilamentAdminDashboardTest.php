@@ -3,7 +3,6 @@
 use App\Filament\Admin\Resources\UserResource;
 use App\Models\User;
 use Filament\Facades\Filament;
-use Filament\Pages\Dashboard;
 
 use function Pest\Laravel\actingAs;
 
@@ -15,6 +14,7 @@ beforeEach(function () {
 });
 
 test('does not allow every user to access admin dashboard', function () {
+    actingAs(User::factory()->create());
     $this->get(UserResource::getUrl())->assertForbidden();
 });
 
