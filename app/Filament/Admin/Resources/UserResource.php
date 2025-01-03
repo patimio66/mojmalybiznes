@@ -85,7 +85,7 @@ class UserResource extends Resource
             ])
             ->actions([
                 Impersonate::make()
-                    ->redirectTo(Dashboard::getUrl()),
+                    ->redirectTo(Dashboard::getUrl(panel: 'app')),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
