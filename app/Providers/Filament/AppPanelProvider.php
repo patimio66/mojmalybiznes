@@ -2,36 +2,39 @@
 
 namespace App\Providers\Filament;
 
-use App\Filament\Admin\Resources\UserResource;
-use App\Filament\Resources\ExpenseResource;
-use App\Filament\Resources\ExpenseResource\Widgets\ExpenseYearlyChart;
-use App\Filament\Resources\IncomeResource;
-use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
-use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
-use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
-use App\Http\Middleware\TransactionMiddleware;
-use App\Livewire\UserProfileEditLimitCategory;
-use App\Livewire\UserProfileEditSeller;
-use App\Livewire\UserProfileShowStorageLimit;
-use Filament\Http\Middleware\Authenticate;
-use Filament\Http\Middleware\DisableBladeIconComponents;
-use Filament\Http\Middleware\DispatchServingFilamentEvent;
-use Filament\Navigation\NavigationBuilder;
-use Filament\Navigation\NavigationGroup;
-use Filament\Navigation\NavigationItem;
-use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
+use Filament\Pages\Dashboard;
 use Filament\Support\Colors\Color;
-use Guava\FilamentKnowledgeBase\KnowledgeBasePlugin;
-use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use App\Livewire\UserProfileEditSeller;
+use Filament\Navigation\NavigationItem;
+use Filament\Navigation\NavigationGroup;
+use App\Filament\Resources\IncomeResource;
+use Filament\Http\Middleware\Authenticate;
+use Filament\Navigation\NavigationBuilder;
+use Jeffgreco13\FilamentBreezy\BreezyCore;
+use App\Filament\Resources\ExpenseResource;
+use App\Livewire\UserProfileShowStorageLimit;
+use App\Filament\Admin\Resources\UserResource;
+use App\Livewire\UserProfileEditLimitCategory;
+use Illuminate\Contracts\Auth\Authenticatable;
+use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use DutchCodingCompany\FilamentSocialite\Provider;
+use Guava\FilamentKnowledgeBase\KnowledgeBasePlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\AuthenticateSession;
-use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
-use Jeffgreco13\FilamentBreezy\BreezyCore;
+use Filament\Http\Middleware\DisableBladeIconComponents;
+use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Laravel\Socialite\Contracts\User as SocialiteUserContract;
+use App\Filament\Resources\IncomeResource\Widgets\DashboardStats;
+use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
+use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
+use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
+use App\Filament\Resources\ExpenseResource\Widgets\ExpenseYearlyChart;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -59,6 +62,28 @@ class AppPanelProvider extends PanelProvider
                         UserProfileShowStorageLimit::class,
                     ]),
                 KnowledgeBasePlugin::make(),
+                FilamentSocialitePlugin::make()
+                    // (required) Add providers corresponding with providers in `config/services.php`.
+                    ->providers([
+                        // Create a provider 'gitlab' corresponding to the Socialite driver with the same name.
+                        Provider::make('google')
+                            ->label('Zaloguj się, używając Google')
+                            ->icon('fab-google')
+                            ->color(Color::hex('#DB4437'))
+                            ->outlined(false)
+                            // ->scopes(['...'])
+                            // ->with(['...'])
+                            ->stateless(false),
+                    ])
+                    ->slug('app')
+                    ->registration(true)
+                    // (optional) Enable/disable registration of new (socialite-) users using a callback.
+                    // In this example, a login flow can only continue if there exists a user (Authenticatable) already.
+                    ->registration(fn(string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
+                // (optional) Change the associated model class.
+                // ->userModelClass(\App\Models\User::class)
+                // (optional) Change the associated socialite class (see below).
+                // ->socialiteUserModelClass(\App\Models\SocialiteUser::class)
             ])
             ->colors([
                 'primary' => Color::Emerald,
@@ -96,7 +121,6 @@ class AppPanelProvider extends PanelProvider
                 SubstituteBindings::class,
                 DisableBladeIconComponents::class,
                 DispatchServingFilamentEvent::class,
-                TransactionMiddleware::class,
             ])
             ->authMiddleware([
                 Authenticate::class,
