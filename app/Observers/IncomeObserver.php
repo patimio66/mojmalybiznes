@@ -14,14 +14,6 @@ class IncomeObserver
      */
     public function creating(Income $income): void
     {
-        if (auth()->user()->getMonthlyIncome($income->date) > auth()->user()->getMonthlyIncomeLimit($income->date)) {
-            Notification::make()
-                ->danger()
-                ->title('Zablokowano operację.')
-                ->body('Operacja spowodowałaby przekroczenie miesięcznego limitu przychodu.')
-                ->send();
-            throw ValidationException::withMessages(['Przekroczono limit przychodu']);
-        }
         $income->user_id = Auth::user()->id;
     }
 
@@ -30,14 +22,6 @@ class IncomeObserver
      */
     public function created(Income $income): void
     {
-        //
-    }
-
-    /**
-     * Handle the Income "updating" event.
-     */
-    public function updating(Income $income): void
-    {
         if (auth()->user()->getMonthlyIncome($income->date) > auth()->user()->getMonthlyIncomeLimit($income->date)) {
             Notification::make()
                 ->danger()
@@ -49,11 +33,26 @@ class IncomeObserver
     }
 
     /**
+     * Handle the Income "updating" event.
+     */
+    public function updating(Income $income): void
+    {
+        //
+    }
+
+    /**
      * Handle the Income "updated" event.
      */
     public function updated(Income $income): void
     {
-        //
+        if (auth()->user()->getMonthlyIncome($income->date) > auth()->user()->getMonthlyIncomeLimit($income->date)) {
+            Notification::make()
+                ->danger()
+                ->title('Zablokowano operację.')
+                ->body('Operacja spowodowałaby przekroczenie miesięcznego limitu przychodu.')
+                ->send();
+            throw ValidationException::withMessages(['Przekroczono limit przychodu']);
+        }
     }
 
     /**
