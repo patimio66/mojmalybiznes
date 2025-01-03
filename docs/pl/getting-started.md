@@ -12,7 +12,9 @@ Jej głównym celem jest pomoc w prowadzeniu jednolitej ewidencji sprzedaży, re
 ### Co robi aplikacja
 
 -   ✅ Pilnuje miesięcznego limitu przychodów
--   ✅ Pozwala wygenerować faktury
+-   ✅ Pomaga w prowadzeniu ewidencji sprzedaży
+-   ✅ Pozwala na rejestrowanie kosztów
+-   ✅ Za jej pomocą wygenerujesz faktury
 -   ✅ Zawiera podsumowania i narzędzia do raportowania
 
 <br>

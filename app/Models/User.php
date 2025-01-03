@@ -12,6 +12,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
 use App\Models\Invoice;
 use App\Models\Expense;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Carbon;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -138,9 +139,16 @@ class User extends Authenticatable implements FilamentUser
      */
     public function getMonthlyIncomeLimit(Carbon $date): float
     {
-        $monthlyLimit = MonthlyIncomeLimit::where('starts_at', '>=', $date->startOfMonth()->format('Y-m-d'))->where(function ($query) use ($date) {
-            $query->where('ends_at', '<=', $date->endOfMonth()->format('Y-m-d'))->orWhereNull('ends_at');
+        $monthlyLimit = MonthlyIncomeLimit::where(function (Builder $query) use ($date) {
+            $query
+                ->where(function (Builder $query) use ($date) {
+                    $query->where('starts_at', '<=', $date->startOfMonth()->format('Y-m-d'));
+                })
+                ->orWhere(function (Builder $query) use ($date) {
+                    $query->whereNull('ends_at')->orWhere('ends_at', '>=', $date->endOfMonth()->format('Y-m-d'));
+                });
         })
+            ->latest('starts_at')
             ->first()
             ?->{$this->limit_category ?? 'default'} ?? throw new \Exception('Monthly income limit not found');
 
@@ -157,9 +165,16 @@ class User extends Authenticatable implements FilamentUser
      */
     public static function monthlyIncomeLimit(Carbon $date, $limit_category = 'default'): float
     {
-        $monthlyLimit = MonthlyIncomeLimit::where('starts_at', '>=', $date->startOfMonth()->format('Y-m-d'))->where(function ($query) use ($date) {
-            $query->where('ends_at', '<=', $date->endOfMonth()->format('Y-m-d'))->orWhereNull('ends_at');
+        $monthlyLimit = MonthlyIncomeLimit::where(function (Builder $query) use ($date) {
+            $query
+                ->where(function (Builder $query) use ($date) {
+                    $query->where('starts_at', '<=', $date->startOfMonth()->format('Y-m-d'));
+                })
+                ->orWhere(function (Builder $query) use ($date) {
+                    $query->whereNull('ends_at')->orWhere('ends_at', '>=', $date->endOfMonth()->format('Y-m-d'));
+                });
         })
+            ->latest('starts_at')
             ->first()
             ?->{$limit_category ?? 'default'} ?? throw new \Exception('Monthly income limit not found');
 
