@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
                 ->colors([
                     'primary' => Color::Emerald,
                 ])
+                ->guestAccess()
         );
     }
 
