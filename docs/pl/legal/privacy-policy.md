@@ -1,5 +1,5 @@
 ---
-group: O aplikacji
+group: Sekcja prawna
 title: Polityka prywatności
 ---
 
