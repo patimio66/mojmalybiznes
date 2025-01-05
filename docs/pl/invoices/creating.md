@@ -42,9 +42,3 @@ Należy sprawdzić poprawność danych Kupującego (można go edytować na stron
 Program potrafi automatycznie przydzielać kolejne numery faktur, jeśli zapisane są w formacie "ROK/NUMER". Najlepiej, gdy zaczynasz ewidencję z programem, pozwolić mu na automatyczne numerowanie faktur.
 
 > ⚠️ **Uwaga:** Brak ciągłości numerowania faktur jest naruszeniem przepisów prawa podatkowego. Może prowadzić między innymi do konsekwencji w postaci kary administracyjnej nałożonej przez organy podatkowe.
-
-# Jak wygenerować korektę faktury?
-
-Jeśli spróbujesz wygenerować drugą i kolejną fakturę, automatycznie zostanie utworzona ==Korekta faktury==.
-
-

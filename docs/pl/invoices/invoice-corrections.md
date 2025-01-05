@@ -4,28 +4,32 @@ title: Korekty faktur
 icon: heroicon-o-document-text
 ---
 
-Zasób umożliwia zarządzanie fakturami w systemie.
+Dla każdej faktury możesz wygenerować fakturę korygującą.
 
-# Pola formularza
+# Kiedy należy utworzyć korektę?
 
-- **Kontrahent**: Wybierz kontrahenta z listy lub dodaj nowego. Pole wymagane.
-- **Numer faktury**: Unikalny numer faktury. Pole wymagane.
-- **Pozycje**: Lista pozycji wchodzących w skład faktury, każda z nich zawiera:
-  - **Tytuł pozycji**: Nazwa pozycji. Pole wymagane.
-  - **Ilość**: Ilość pozycji. Pole wymagane.
-  - **Jednostka miary**: Jednostka miary dla ilości. Pole wymagane.
-  - **Kwota**: Cena jednostkowa pozycji. Pole wymagane.
-  - **Suma**: Łączna kwota za pozycję (ilość * kwota). Pole automatycznie wyliczane.
-- **Suma faktury**: Łączna kwota za wszystkie pozycje. Pole automatycznie wyliczane.
-- **Data wystawienia**: Data, kiedy faktura została wystawiona. Pole wymagane.
-- **Data płatności**: Data, do kiedy faktura powinna zostać opłacona. Pole wymagane.
-- **Notatka**: Prywatna notatka dotycząca faktury, która nie pojawi się w raportach.
-- **Zapłacono całą kwotę**: Przełącznik wskazujący, czy cała kwota została zapłacona.
+Fakturę korygującą wystawiasz tylko wtedy, gdy po wystawieniu faktury pierwotnej:
 
-# Do czego służy
-Faktury pozwalają na rejestrowanie i śledzenie wszystkich transakcji fakturowych w systemie. Można je powiązać z kontrahentami oraz przychodami, co ułatwia zarządzanie finansami firmy.
+-   stwierdziłeś pomyłkę w cenie, stawce, kwocie podatku lub w jakiejkolwiek innej pozycji faktury
+-   udzielasz obniżki ceny w formie rabatu
+-   nabywca zwrócił ci towar
+-   zwróciłeś nabywcy całość lub części zapłaty
+-   wystawiłeś fakturę bez adnotacji „mechanizm podzielonej płatności”, mimo iż miałeś taki obowiązek.\*
 
-> ⚠️ **Uwaga:** Usunięcie faktury powoduje również automatyczne usunięcie wszystkich przypisanych do niej pozycji oraz powiązanych przychodów. Operacja ta jest nieodwracalna!
+<small>\*nie dotyczy to osób prowadzących nierejestrowaną działalność, z powodu niemożności przekroczenia kwoty (limit)</small>
 
-# Relacje między modelami
-Faktury są powiązane z kontrahentami oraz przychodami. Każda faktura musi mieć przypisanego kontrahenta, który jest odbiorcą faktury. Faktury mogą być również powiązane z przychodami.
+# Jak wygenerować korektę faktury?
+
+Jeśli spróbujesz wygenerować drugą i kolejną fakturę dla danego przychodu, automatycznie zostanie utworzona ==faktura korygująca==.
+
+Najpierw edytuj przychód. Zmień wszystkie dane, które chcesz poprawić.
+
+Następnie **Zapisz** przychód - jest to niezbędne do prawidłowego wystawienia korekty.
+
+Kolejnym krokiem jest kliknięcie przycisku **Utwórz** na samym dole strony edycji przychodu. System automatycznie sprawdzi, czy wystawiona została już faktura, i wyświetli informację, że tworzona jest korekta faktury.
+
+Zgodnie z wymaganiami prawnymi, należy podać (widniejący również na dokumencie) powód wystawienia faktury korygującej.
+
+Tak wygląda panel po wystawieniu faktury korygującej:
+
+![Panel faktur po wystawieniu korekty](/resources/docs-img/income-invoice-relation-manager-with-correction.png)
