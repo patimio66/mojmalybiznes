@@ -19,7 +19,7 @@ class ContractorFactory extends Factory
             'address' => $this->faker->streetAddress,
             'postal_code' => $this->faker->postcode,
             'city' => $this->faker->city,
-            'country' => $this->faker->country,
+            'country' => 'pl',
             'email' => $this->faker->unique()->safeEmail,
             'phone' => $this->faker->phoneNumber,
         ];
