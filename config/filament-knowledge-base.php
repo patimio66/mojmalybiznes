@@ -4,7 +4,7 @@
 return [
     'panel' => [
         'id' => env('FILAMENT_KB_ID', 'knowledge-base'),
-        'path' => env('FILAMENT_KB_PATH', 'kb'),
+        'path' => env('FILAMENT_KB_PATH', 'docs'),
     ],
 
     'docs-path' => env('FILAMENT_KB_DOCS_PATH', 'docs'),
