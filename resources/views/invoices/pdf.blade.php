@@ -111,7 +111,7 @@
             <p>{{ $invoice->seller_name }}</p>
             <p>{{ $invoice->seller_address }}</p>
             <p>{{ $invoice->seller_postal_code }} {{ $invoice->seller_city }}</p>
-            <p>{{ $invoice->seller_country }}</p>
+            <p>{{ Str::upper($invoice->seller_country) }}</p>
             <p>{{ $invoice->seller_email }}</p>
             <p>{{ $invoice->seller_phone }}</p>
           </td>
@@ -130,7 +130,7 @@
               <p>{{ $invoice->contractor_name }}</p>
               <p>{{ $invoice->contractor_address }}</p>
               <p>{{ $invoice->contractor_postal_code }} {{ $invoice->contractor_city }}</p>
-              <p>{{ $invoice->contractor_country }}</p>
+              <p>{{ Str::upper($invoice->contractor_country) }}</p>
               <p>{{ $invoice->contractor_email }}</p>
               <p>{{ $invoice->contractor_phone }}</p>
             </td>
