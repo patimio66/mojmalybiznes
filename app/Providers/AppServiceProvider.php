@@ -27,6 +27,7 @@ class AppServiceProvider extends ServiceProvider
                     'primary' => Color::Emerald,
                 ])
                 ->guestAccess()
+                ->disableBackToDefaultPanelButton()
         );
     }
 
