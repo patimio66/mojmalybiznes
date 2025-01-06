@@ -22,6 +22,7 @@ class InvoiceObserver
             throw ValidationException::withMessages(['Przekroczono limit miejsca']);
         }
         $invoice->user_id = Auth::user()->id;
+        $invoice->seller_name ??= Auth::user()->name;
     }
 
     /**
