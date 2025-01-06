@@ -91,7 +91,6 @@
           <td>
             <h2>Faktura {{ $invoice->parent ? 'korygująca ' : '' }} nr: {{ $invoice->invoice_number }}</h2>
             @if ($invoice->parent)
-              <p>Numer ostatniej faktury korygującej: {{ $invoice->parent->invoice_number }}</p>
               @php
                 $currentInvoice = $invoice;
                 while ($currentInvoice->parent) {
@@ -99,6 +98,9 @@
                 }
                 $lastParentInvoiceNumber = $currentInvoice->invoice_number;
               @endphp
+              @if ($lastParentInvoiceNumber == $invoice->parent->invoice_number)
+                <p>Numer ostatniej faktury korygującej: {{ $invoice->parent->invoice_number }}</p>
+              @endif
               <p>Dotyczy faktury pierwotnej nr: {{ $lastParentInvoiceNumber }}</p>
               <p>Powód wystawienia faktury korygującej: {{ $invoice->correction_reason }}</p>
             @endif
@@ -184,7 +186,7 @@
             <p>{{ $invoice->contractor_name }}</p>
             <p>{{ $invoice->contractor_address }}</p>
             <p>{{ $invoice->contractor_postal_code }} {{ $invoice->contractor_city }}</p>
-            <p>{{ $invoice->contractor_country }}</p>
+            <p>{{ Str::upper($invoice->contractor_country) }}</p>
             <p>{{ $invoice->contractor_email }}</p>
             <p>{{ $invoice->contractor_phone }}</p>
           </td>
