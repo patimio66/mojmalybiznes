@@ -5,17 +5,24 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use Filament\Panel;
+use App\Models\Income;
+use App\Models\Expense;
+use App\Models\Invoice;
+use Illuminate\Support\Carbon;
+use App\Observers\UserObserver;
+use App\Models\MonthlyIncomeLimit;
+use DutchCodingCompany\FilamentSocialite\Models\SocialiteUser;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Builder;
 use Filament\Models\Contracts\FilamentUser;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Jeffgreco13\FilamentBreezy\Traits\TwoFactorAuthenticatable;
-use App\Models\Invoice;
-use App\Models\Expense;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Support\Carbon;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
+#[ObservedBy(UserObserver::class)]
 class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
@@ -64,6 +71,11 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function socialiteUsers(): HasMany
+    {
+        return $this->hasMany(SocialiteUser::class);
     }
 
     public function canAccessPanel(Panel $panel): bool
