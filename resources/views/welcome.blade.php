@@ -16,20 +16,24 @@
 </head>
 
 <body class="p-4 font-sans antialiased text-gray-700 bg-gray-200 sm:p-8 lg:p-16">
-  <div class="max-w-screen-xl py-12 mx-auto bg-gray-100 shadow-xl shadow-gray-300/10 rounded-xl">
-    <nav class="relative flex gap-4 py-8">
+  <div class="max-w-screen-xl py-6 mx-auto bg-gray-100 shadow-xl sm:py-12 shadow-gray-300/10 rounded-xl">
+    <nav class="relative flex gap-4 pb-8 sm:pt-8">
       <div class="flex justify-center flex-1">
         <div class="pointer-events-auto">
-          <ul class="flex px-3 text-sm font-medium text-gray-800 rounded-full shadow-lg bg-white/90 shadow-gray-800/5 ring-1 ring-gray-900/5 backdrop-blur">
-            <li><a class="relative block px-3 py-2 transition hover:text-emerald-500" href="/">Strona główna</a></li>
-            <li><a class="relative block px-3 py-2 transition hover:text-emerald-500" href="{{ route('filament.app.auth.login') }}">Zaloguj się</a></li>
+          <ul
+            class="flex flex-col px-3 text-sm font-medium text-center text-gray-800 rounded-lg shadow-lg sm:flex-row sm:rounded-full bg-white/90 shadow-gray-800/5 ring-1 ring-gray-900/5 backdrop-blur">
+            <li><a class="relative block px-3 py-1.5 transition hover:text-emerald-500" href="/">Strona główna</a></li>
+            <li><a class="relative block px-3 py-1.5 transition hover:text-emerald-500" href="https://github.com/patimio66/mojmalybiznes">GitHub</a></li>
+            <li><a class="relative block px-3 py-1.5 transition hover:text-emerald-500"
+                href="{{ route('filament.knowledge-base.resources.documentations.view', ['record' => 'getting-started']) }}">Dokumentacja</a></li>
+            <li><a class="relative block px-3 py-1.5 transition hover:text-emerald-500" href="{{ route('filament.app.auth.login') }}">Zaloguj się</a></li>
           </ul>
         </div>
       </div>
     </nav>
     <main class="relative grid p-4 sm:p-8 lg:p-16 align-center">
       <section class="max-w-screen-sm mx-auto mb-32 text-center" id="hero">
-        <div class="inline-flex gap-2 px-3 py-1.5 rounded-xl mb-6 text-xs font-bold uppercase bg-amber-100 text-amber-600">
+        <div class="inline-flex gap-2 px-3 py-1.5 rounded-xl mb-6 text-xs font-bold uppercase bg-indigo-100 text-indigo-600">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
             <path fill-rule="evenodd"
               d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z"
@@ -37,12 +41,23 @@
           </svg>
           <span>Wersja rozwojowa</span>
         </div>
-        <h1 class="mb-6 text-3xl font-bold leading-none tracking-tight text-gray-900 lg:text-5xl">
-          Uporządkuj swoją działalność nierejestrowaną w kilka minut.
+        <h1 class="mb-6 text-xl min-[360px]:text-2xl font-bold leading-none tracking-tight text-gray-900 xs:text-2xl lg:text-5xl">
+          Uporządkuj swoją działalność&nbsp;nierejestrowaną w&nbsp;kilka&nbsp;minut.
         </h1>
-        <p class="mb-8 text-gray-500 lg:text-xl">
-          Proste narzędzie stworzone z myślą o nierejestrowanych przedsiębiorcach – wszystkie funkcje, których potrzebujesz, w jednym miejscu. Łatwo, szybko i bez opłat.
-        </p>
+        <div class="hidden sm:block">
+          <ul class="mb-8 space-y-2 text-gray-500 list-inside lg:text-xl">
+            <li>✅ Poprowadź własną <mark class="px-1 py-0.5 rounded bg-emerald-200">ewidencję sprzedaży</mark></li>
+            <li>✅ Utrzymuj miesięczny <mark class="px-1 py-0.5 rounded bg-emerald-200">limit przychodów</mark></li>
+            <li>✅ Z łatwością <mark class="px-1 py-0.5 rounded bg-emerald-200">wygeneruj faktury</mark></li>
+          </ul>
+        </div>
+        <div class="sm:hidden">
+          <ul class="mb-8 space-y-2 text-gray-500 list-inside lg:text-xl">
+            <li>✅ Ewidencja <mark class="px-1 py-0.5 rounded bg-emerald-200">sprzedaży</mark></li>
+            <li>✅ Generowanie <mark class="px-1 py-0.5 rounded bg-emerald-200">faktur</mark></li>
+            <li>✅ Limit <mark class="px-1 py-0.5 rounded bg-emerald-200">przychodów</mark></li>
+          </ul>
+        </div>
         <div class="flex flex-col space-y-4 sm:flex-row sm:justify-center sm:space-y-0 sm:space-x-4">
           <a href="{{ route('filament.app.auth.register') }}"
             class="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-white transition-all rounded-lg bg-emerald-600 hover:bg-emerald-700 bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 hover:scale-105 hover:rotate-1 hover:shadow-xl hover:shadow-emerald-500/10">
@@ -61,7 +76,7 @@
         </h3>
         <ul class="mb-8 ml-5 space-y-2 list-disc lg:text-lg">
           <li>
-            <strong>Bez zbędnych formalności</strong>: Wszystkie niezbędne procesy staną się proste i intuicyjne. Nie musisz już martwić się o skomplikowaną dokumentację – przepisy
+            <strong>Prostota używania</strong>: Wszystkie niezbędne procesy staną się proste i intuicyjne. Nie musisz już martwić się o skomplikowaną dokumentację – przepisy
             ciągle się zmieniają, a my trzymamy rękę na pulsie.
           </li>
           <li>

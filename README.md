@@ -1,12 +1,8 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Logo Laravel"></a></p>
-
-<p align="center">
 <a href="https://github.com/patimio66/mojmalybiznes/actions"><img src="https://github.com/patimio66/mojmalybiznes/actions/workflows/laravel.yml/badge.svg" alt="Status kompilacji"></a>
-</p>
 
 ## O projekcie
 
-Mój Mały Biznes to proste narzędzie stworzone z myślą o nierejestrowanych przedsiębiorcach. Taką działalność można nazywać działalnością nierejestrowaną, lub działalnością nierejestrową. Będziemy posługiwać się oboma pojęciami zamiennie.
+[Mój Mały Biznes](mojmalybiznes.pl) to proste narzędzie stworzone z myślą o nierejestrowanych przedsiębiorcach.
 
 Jej głównym celem jest pomoc w prowadzeniu jednolitej ewidencji sprzedaży, rejestrowania zakupów (w celu wyliczenia dochodu) oraz generowania faktur sprzedaży, czyli wszystko to, co potrzebne jest w prowadzeniu działalności nierejestrowanej.
 
