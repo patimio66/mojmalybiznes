@@ -33,7 +33,7 @@ Aby zainstalować ten projekt Laravel lokalnie, wykonaj poniższe kroki:
 1. Sklonuj repozytorium:
 
     ```sh
-    git clone https://github.com/yourusername/mojmalybiznes.git
+    git clone https://github.com/patimio66/mojmalybiznes.git
     cd mojmalybiznes
     ```
 
