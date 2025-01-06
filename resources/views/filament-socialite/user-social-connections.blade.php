@@ -18,7 +18,7 @@
                 Odłącz
               </x-filament::button>
             @else
-              <x-filament::button :href="route('socialite.filament.app.oauth.redirect', ['provider' => $provider->getName()])" color="primary" outlined>
+              <x-filament::button tag="a" :href="route('socialite.filament.app.oauth.redirect', ['provider' => $provider->getName()])" color="primary" outlined>
                 Połącz
               </x-filament::button>
             @endif
