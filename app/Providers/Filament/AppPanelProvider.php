@@ -35,6 +35,7 @@ use DutchCodingCompany\FilamentSocialite\FilamentSocialitePlugin;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeLimitChart;
 use App\Filament\Resources\IncomeResource\Widgets\IncomeYearlyChart;
 use App\Filament\Resources\ExpenseResource\Widgets\ExpenseYearlyChart;
+use App\Livewire\UserProfileSocialMediaConnections;
 
 class AppPanelProvider extends PanelProvider
 {
@@ -60,12 +61,15 @@ class AppPanelProvider extends PanelProvider
                         UserProfileEditLimitCategory::class,
                         UserProfileEditSeller::class,
                         UserProfileShowStorageLimit::class,
+                        UserProfileSocialMediaConnections::class,
+                    ])
+                    ->withoutMyProfileComponents([
+                        'update_password'
                     ]),
                 KnowledgeBasePlugin::make(),
                 FilamentSocialitePlugin::make()
-                    // (required) Add providers corresponding with providers in `config/services.php`.
                     ->providers([
-                        // Create a provider 'gitlab' corresponding to the Socialite driver with the same name.
+                        // Create a provider corresponding to the Socialite driver with the same name. `config/services.php`
                         Provider::make('google')
                             ->label('Zaloguj się, używając Google')
                             ->icon('fab-google')
@@ -77,13 +81,6 @@ class AppPanelProvider extends PanelProvider
                     ])
                     ->slug('app')
                     ->registration(true)
-                    // (optional) Enable/disable registration of new (socialite-) users using a callback.
-                    // In this example, a login flow can only continue if there exists a user (Authenticatable) already.
-                    ->registration(fn(string $provider, SocialiteUserContract $oauthUser, ?Authenticatable $user) => (bool) $user)
-                // (optional) Change the associated model class.
-                // ->userModelClass(\App\Models\User::class)
-                // (optional) Change the associated socialite class (see below).
-                // ->socialiteUserModelClass(\App\Models\SocialiteUser::class)
             ])
             ->colors([
                 'primary' => Color::Emerald,
