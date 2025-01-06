@@ -45,12 +45,4 @@ class UserProfileSocialMediaConnections extends MyProfileComponent
                     ])
             ]);
     }
-
-    public function submit(): void
-    {
-        Notification::make()
-            ->success()
-            ->title('Zapisano.')
-            ->send();
-    }
 }
