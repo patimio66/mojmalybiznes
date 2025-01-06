@@ -71,4 +71,4 @@ Jeśli odkryjesz lukę w zabezpieczeniach w Laravel, wyślij e-mail na adres [ko
 
 ## Licencja
 
-Treści zawarte w aplikacji są dostępne na licencji [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/).
+Treści zawarte w aplikacji są dostępne na licencji [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Szczegóły znajdziesz w pliku [LICENSE.md](LICENSE.md).
