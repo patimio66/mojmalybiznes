@@ -64,7 +64,3 @@ Teraz możesz uzyskać dostęp do aplikacji pod adresem `http://localhost:8000`.
 ## Luki w zabezpieczeniach
 
 Jeśli odkryjesz lukę w zabezpieczeniach w Laravel, wyślij e-mail na adres [kontakt@quiksite.pl](mailto:kontakt@quiksite.pl). Wszystkie luki w zabezpieczeniach zostaną sprawdzone tak szybko, jak to możliwe. W temacie maila dodaj \[Security\] lub \[Bezpieczeństwo\].
-
-## Licencja
-
-Treści zawarte w aplikacji są dostępne na licencji [Creative Commons BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). Szczegóły znajdziesz w pliku [LICENSE.md](LICENSE.md).
