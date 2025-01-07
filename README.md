@@ -2,7 +2,7 @@
 
 ## O projekcie
 
-[Mój Mały Biznes](mojmalybiznes.pl) to proste narzędzie stworzone z myślą o nierejestrowanych przedsiębiorcach.
+[Mój Mały Biznes](https://mojmalybiznes.pl) to proste narzędzie stworzone z myślą o nierejestrowanych przedsiębiorcach.
 
 Jej głównym celem jest pomoc w prowadzeniu jednolitej ewidencji sprzedaży, rejestrowania zakupów (w celu wyliczenia dochodu) oraz generowania faktur sprzedaży, czyli wszystko to, co potrzebne jest w prowadzeniu działalności nierejestrowanej.
 
