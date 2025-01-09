@@ -111,6 +111,7 @@
           <td style="text-align: right;">
             <h3>Dane sprzedawcy:</h3>
             <p>{{ $invoice->seller_name }}</p>
+            <p>{{ $invoice->seller_tax_id }}</p>
             <p>{{ $invoice->seller_address }}</p>
             <p>{{ $invoice->seller_postal_code }} {{ $invoice->seller_city }}</p>
             <p>{{ Str::upper($invoice->seller_country) }}</p>
@@ -130,6 +131,7 @@
             <td>
               <h3>Dane kupującego:</h3>
               <p>{{ $invoice->contractor_name }}</p>
+              <p>{{ $invoice->contractor_tax_id }}</p>
               <p>{{ $invoice->contractor_address }}</p>
               <p>{{ $invoice->contractor_postal_code }} {{ $invoice->contractor_city }}</p>
               <p>{{ Str::upper($invoice->contractor_country) }}</p>
@@ -184,6 +186,7 @@
           <td>
             <h3>Dane kupującego:</h3>
             <p>{{ $invoice->contractor_name }}</p>
+            <p>{{ $invoice->contractor_tax_id }}</p>
             <p>{{ $invoice->contractor_address }}</p>
             <p>{{ $invoice->contractor_postal_code }} {{ $invoice->contractor_city }}</p>
             <p>{{ Str::upper($invoice->contractor_country) }}</p>
