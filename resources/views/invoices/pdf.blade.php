@@ -102,7 +102,8 @@
                 <p>Numer ostatniej faktury korygującej: {{ $invoice->parent->invoice_number }}</p>
               @endif
               <p>Dotyczy faktury pierwotnej nr: {{ $lastParentInvoiceNumber }}</p>
-              <p>Powód wystawienia faktury korygującej: {{ $invoice->correction_reason }}</p>
+              <p>Powód wystawienia faktury korygującej:</p>
+              <p>{{ $invoice->correction_reason }}</p>
             @endif
             <p>Data wystawienia: {{ $invoice->issue_date->format('d.m.Y') }}</p>
             <p>Data transakcji: {{ $invoice->transaction_date->format('d.m.Y') }}</p>
