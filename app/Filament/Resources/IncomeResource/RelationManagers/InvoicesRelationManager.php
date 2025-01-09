@@ -258,6 +258,7 @@ class InvoicesRelationManager extends RelationManager
                             'contractor_address' => $contractor->address,
                             'contractor_email' => $contractor->email,
                             'contractor_phone' => $contractor->phone,
+                            'correction_reason' => $data['correction_reason'] ?? null,
                         ]);
 
                         // Add InvoiceItem to the Invoice by copying from Income
