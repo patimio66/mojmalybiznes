@@ -124,7 +124,7 @@ class InvoiceResource extends Resource
                     ->label('Kontrahent')
                     ->url(fn(Invoice $invoice) => route('filament.app.resources.contractors.edit', $invoice->contractor_id)),
                 Tables\Columns\TextColumn::make('income.title')
-                    ->label('Przychód')
+                    ->label('Tytuł')
                     ->url(fn(Invoice $invoice) => route('filament.app.resources.incomes.edit', $invoice->income_id)),
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Utworzono')
