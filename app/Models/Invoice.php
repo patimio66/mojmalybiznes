@@ -135,12 +135,12 @@ class Invoice extends Model implements HasMedia
         if (!$file) {
             $pdf = SnappyPdf::loadView('invoices.pdf', ['invoice' => $this]);
 
-            // This fix is neccessary for some local Windows installs
+            // This fix is neccessary for some local Windows installations
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
                 $pdf->setOption('enable-local-file-access', true);
             }
 
-           $this->addMediaFromStream($pdf->output())
+            $this->addMediaFromStream($pdf->output())
                 ->toMediaCollection();
             $file = $this->getFirstMedia();
         }
