@@ -24,7 +24,9 @@ Ostatecznie to na użytkowniku spoczywa odpowiedzialność prawidłowego rozlicz
 
 ## Instalacja
 
-Aby zainstalować ten projekt Laravel lokalnie, wykonaj poniższe kroki:
+Uwaga. Do prawidłowego działania aplikacji wymagana jest biblioteka [wkhtmltopdf](https://wkhtmltopdf.org/downloads.html).
+
+Aby zainstalować projekt lokalnie, wykonaj poniższe kroki:
 
 1. Sklonuj repozytorium:
 
