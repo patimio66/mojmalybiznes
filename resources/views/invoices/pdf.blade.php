@@ -60,7 +60,7 @@
 
     .items th,
     .items td {
-      padding: 6px;
+      padding: 4px;
       border: 1px solid #e2e8f0;
     }
 
@@ -102,8 +102,7 @@
                 <p>Numer ostatniej faktury korygującej: {{ $invoice->parent->invoice_number }}</p>
               @endif
               <p>Dotyczy faktury pierwotnej nr: {{ $lastParentInvoiceNumber }}</p>
-              <p>Powód wystawienia faktury korygującej:</p>
-              <p>{{ $invoice->correction_reason }}</p>
+              <p>Powód wystawienia: {{ $invoice->correction_reason }}</p>
             @endif
             <p>Data wystawienia: {{ $invoice->issue_date->format('d.m.Y') }}</p>
             <p>Data transakcji: {{ $invoice->transaction_date->format('d.m.Y') }}</p>
