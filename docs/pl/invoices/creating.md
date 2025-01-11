@@ -37,7 +37,7 @@ Aplikacja pozwala na wystawianie faktur zwolnionych z VAT. Nie pozwala na wystaw
 
 Po kliknięciu przycisku ==Utwórz== wyświetli się okno generowania faktury.
 
-Należy sprawdzić poprawność danych Kupującego (można go edytować na stronie przychodu lub w zakładce Kontrahenci) oraz Sprzedawcy (dane można edytować w ustawieniach profilu), wybrać odpowiednie zwolnienie podatkowe, podać prawidłowe daty i - jeśli to konieczne - uzupełnić numer kolejny faktury.
+Należy sprawdzić poprawność danych Kupującego (można go edytować na stronie przychodu lub w zakładce Kontrahenci) oraz Sprzedawcy (dane można edytować w ustawieniach konta), wybrać odpowiednie zwolnienie podatkowe, podać prawidłowe daty i - jeśli to konieczne - uzupełnić numer kolejny faktury.
 
 Program potrafi automatycznie przydzielać kolejne numery faktur, jeśli zapisane są w formacie "ROK/NUMER". Najlepiej, gdy zaczynasz ewidencję z programem, pozwolić mu na automatyczne numerowanie faktur.
 

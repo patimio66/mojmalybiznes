@@ -44,7 +44,7 @@ Musisz zarejestrować firmę, nawet jeśli planujesz niewielkie przychody, ale d
 \
 W tych przypadkach działalność nie może być wykonywana bez rejestracji.
 
-Jeśli jesteś zarejestrowaną osobą bezrobotną, obowiązuje Cię niższy limit przychodów. Jest to obecnie 50% kwoty minimalnego wynagrodzenia. Aplikacja pozwala na wybranie tej opcji w ustawieniach profilu - po zmianie ustawień, limit zostanie ustawiony na odpowiedni.
+Jeśli jesteś zarejestrowaną osobą bezrobotną, obowiązuje Cię niższy limit przychodów. Jest to obecnie 50% kwoty minimalnego wynagrodzenia. Aplikacja pozwala na wybranie tej opcji w ustawieniach konta - po zmianie ustawień, limit zostanie ustawiony na odpowiedni.
 
 > ⚠️ **Uwaga:** Osoby bezrobotne mogą tylko sprzedawać produkty. Nie mogą świadczyć usług z tytułu działalności nierejestrowanej.
 

@@ -134,9 +134,12 @@ class Invoice extends Model implements HasMedia
         $file = $this->getFirstMedia();
         if (!$file) {
             $pdf = SnappyPdf::loadView('invoices.pdf', ['invoice' => $this]);
-            // Windows fix
-            $pdf->setTemporaryFolder(storage_path('app\\temp'));
-            // use laravel-medialibrary to store the pdf
+
+            // This fix is neccessary for some local Windows installations
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $pdf->setOption('enable-local-file-access', true);
+            }
+
             $this->addMediaFromStream($pdf->output())
                 ->toMediaCollection();
             $file = $this->getFirstMedia();

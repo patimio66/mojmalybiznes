@@ -112,7 +112,7 @@ class InvoicesRelationManager extends RelationManager
                             ->columns(1)
                             ->columnSpan(1),
                         Forms\Components\Placeholder::make('edit_seller_information')
-                            ->label('Sprzedawcę można edytować w ustawieniach profilu.')
+                            ->label('Sprzedawcę można edytować w ustawieniach konta.')
                             ->columns(1)
                             ->columnSpan(1),
                     ])
