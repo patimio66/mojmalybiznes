@@ -33,13 +33,17 @@
     </nav>
     <main class="relative grid p-4 sm:p-8 lg:p-16 align-center">
       <section class="max-w-screen-sm mx-auto mb-32 text-center" id="hero">
-        <div class="inline-flex gap-2 px-3 py-1.5 rounded-xl mb-6 text-xs font-bold uppercase bg-indigo-100 text-indigo-600">
+        <div class="inline-flex gap-2 px-3 py-1.5 rounded-xl mb-6 text-xs font-bold uppercase bg-red-100 text-red-600">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
             <path fill-rule="evenodd"
               d="M15 8A7 7 0 1 1 1 8a7 7 0 0 1 14 0ZM9 5a1 1 0 1 1-2 0 1 1 0 0 1 2 0ZM6.75 8a.75.75 0 0 0 0 1.5h.75v1.75a.75.75 0 0 0 1.5 0v-2.5A.75.75 0 0 0 8.25 8h-1.5Z"
               clip-rule="evenodd" />
           </svg>
-          <span>Wersja rozwojowa</span>
+          <span>Aplikacja wycofywana</span>
+        </div>
+        <div class="inline-flex gap-2 px-3 py-1.5 rounded-xl text-lg mb-6 font-medium text-red-600">
+          W związku z planowanym wprowadzeniem KSEF w lutym 2026 roku, z powodu braku zasobów do dalszego rozwoju jesteśmy zmuszeni zakończyć działalnie
+          aplikacji. Aby umożliwić migrację do innej platformy, Mój Mały Biznes będzie dostępny do 30 września 2025. Dziękujemy za zaufanie.
         </div>
         <h1 class="mb-6 text-xl min-[360px]:text-2xl font-bold leading-none tracking-tight text-gray-900 xs:text-2xl lg:text-5xl">
           Uporządkuj swoją działalność&nbsp;nierejestrowaną w&nbsp;kilka&nbsp;minut.
