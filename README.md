@@ -1,6 +1,9 @@
 # ⚠️ DEPRECATED
 
-### ⚠️ W związku z planowanym wprowadzeniem KSEF w lutym 2026 roku, z powodu braku zasobów do dalszego rozwoju jesteśmy zmuszeni zakończyć działalnie aplikacji. Aby umożliwić migrację do innej platformy, Mój Mały Biznes będzie dostępny do 30 września 2025. Dziękujemy za zaufanie. ⚠️
+### ⚠️ W związku z planowanym wprowadzeniem KSEF w lutym 2026 roku, z powodu braku zasobów do dalszego rozwoju (i możliwości dostosowania się do wymagań KSEF) jesteśmy zmuszeni zakończyć działalnie aplikacji. Aby umożliwić migrację do innej platformy, Mój Mały Biznes będzie dostępny do 30 września 2025. Dziękujemy za zaufanie. ⚠️
+
+
+
 
 <a href="https://github.com/patimio66/mojmalybiznes/actions"><img src="https://github.com/patimio66/mojmalybiznes/actions/workflows/laravel.yml/badge.svg" alt="Status kompilacji"></a>
 
